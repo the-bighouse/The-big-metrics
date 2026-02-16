@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TBH Funding Intelligence | The Big House</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--pk:#E6007E;--tl:#68E2D4;--yl:#F3D245;--bl:#42AEF0;--gn:#34d399;--rd:#ef4444;--cd:#111;--bd:#1a1a1a;--sc:#888;--mt:#555}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lato',-apple-system,sans-serif;background:#000;color:#fff;line-height:1.5;overflow-x:hidden}
+.bb{font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.bg-r{position:fixed;border:1.5px solid;pointer-events:none;z-index:0;opacity:.06}
+.r1{width:500px;height:350px;top:5%;right:-5%;transform:rotate(12deg);border-color:var(--tl)}
+.r2{width:450px;height:300px;top:6%;right:-4%;transform:rotate(12deg);border-color:var(--pk)}
+.r3{width:400px;height:280px;bottom:10%;left:-3%;transform:rotate(-8deg);border-color:var(--tl)}
+.dash{max-width:1600px;margin:0 auto;padding:16px 20px;position:relative;z-index:1}
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--bd);margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.hdr-t{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px}
+.hdr-t span{color:var(--pk)}
+.hdr-s{font-size:11px;color:var(--mt);margin-top:2px}
+.hdr-r{display:flex;align-items:center;gap:14px}
+.scan{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:8px 22px;background:var(--pk);color:#fff;border:none;cursor:pointer;border-radius:2px;transition:all .2s}
+.scan:hover{background:#ff1a8f;transform:translateY(-1px)}
+.nav{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.nav-b{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;padding:8px 18px;border:none;cursor:pointer;background:transparent;color:var(--mt);border-radius:2px;transition:all .15s}
+.nav-b.on{background:var(--pk);color:#fff}
+.nav-b:not(.on):hover{color:#fff;background:#1a1a1a}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 5px;border-radius:8px;background:var(--pk);color:#fff;font-size:9px;font-weight:700;margin-left:6px;font-family:Lato}
+.yr-tabs{display:flex;gap:4px;margin-bottom:14px}
+.yr-b{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:5px 16px;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:pointer;border-radius:2px;transition:all .15s}
+.yr-b.on{background:var(--tl);color:#000;border-color:var(--tl)}
+.sec-t{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--pk);letter-spacing:2px;margin-bottom:8px;padding-left:2px}
+.mrow{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.mc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px 16px;flex:1;min-width:160px}
+.mc-l{font-size:10px;color:var(--sc);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.mc-v{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1.1}
+.gap-c{margin-bottom:14px}
+.gap-h{display:flex;justify-content:space-between;margin-bottom:4px}
+.gap-trk{height:22px;background:#1a1a1a;border-radius:3px;overflow:hidden;position:relative}
+.gap-s{position:absolute;height:100%;background:var(--tl);border-radius:3px;opacity:.85;transition:width .5s}
+.gap-w{position:absolute;height:100%;background:var(--pk);border-radius:3px;opacity:.4;transition:width .5s}
+.gap-f{display:flex;justify-content:space-between;margin-top:2px;font-size:9px;color:var(--mt)}
+.tw{background:var(--cd);border:1px solid var(--bd);border-radius:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
+thead tr{background:#141414}
+th{padding:10px;text-align:left;color:var(--mt);font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;border-bottom:1px solid var(--bd);white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid #0d0d0d;white-space:nowrap}
+tr:hover td{background:#0d0d0d}
+.tf{padding:8px 10px;border-top:1px solid var(--bd);background:#141414;display:flex;justify-content:space-between;font-size:11px}
+.sb{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:700;cursor:pointer;user-select:none;transition:all .15s}
+.sb:hover{filter:brightness(1.2);transform:scale(1.05)}
+.sb .dt{width:5px;height:5px;border-radius:50%}
+.sb-sec{background:#0a2e1f;color:#6ee7b7}.sb-sec .dt{background:#34d399}
+.sb-app{background:#0f2744;color:#93c5fd}.sb-app .dt{background:#60a5fa}
+.sb-pro{background:#2a1f0a;color:#fbbf24}.sb-pro .dt{background:#f59e0b}
+.sb-uns{background:#2a0a0a;color:#fca5a5}.sb-uns .dt{background:#ef4444}
+.flt{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.fb{font-size:10px;padding:4px 10px;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:pointer;border-radius:3px;transition:all .15s}
+.fb.on{border-color:var(--tl);color:var(--tl);background:rgba(104,226,212,.08)}
+.fsep{width:1px;height:16px;background:var(--bd);margin:0 2px}
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.dc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px;border-left:3px solid var(--tl)}
+.dc.hi{border-left-color:var(--gn)}.dc.md{border-left-color:var(--yl)}.dc.lo{border-left-color:var(--rd)}
+.abtn{font-size:10px;padding:4px 12px;background:var(--pk);color:#fff;border:none;border-radius:3px;cursor:pointer;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.abtn:hover{background:#ff1a8f}
+.dbtn{font-size:10px;padding:4px 12px;background:transparent;color:var(--mt);border:1px solid var(--bd);border-radius:3px;cursor:pointer}
+.rc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px;margin-bottom:10px}
+.rft{display:inline-block;padding:2px 8px;background:rgba(104,226,212,.1);color:var(--tl);border-radius:3px;font-size:10px;margin:2px 4px 2px 0;cursor:pointer;transition:background .15s}
+.rft:hover{background:rgba(104,226,212,.2)}
+.rft.done{opacity:.6;cursor:default;background:rgba(52,211,153,.1);color:var(--gn)}
+.oc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:12px;margin-bottom:8px}
+.ot{font-size:9px;padding:2px 6px;background:#1a1a1a;color:var(--sc);border-radius:2px}
+.sc-c{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:16px;margin-bottom:10px}
+.sc-st{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap}
+.sc-live{background:#0a2e1f;color:#6ee7b7}.sc-plan{background:#2a1f0a;color:#fbbf24}.sc-idea{background:#1a1a1a;color:#888}
+.cc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:16px;margin-bottom:16px}
+.mo{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center}
+.mb{background:var(--cd);border:1px solid var(--bd);border-radius:6px;padding:24px;width:90%;max-width:480px;max-height:90vh;overflow-y:auto}
+.mb h3{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:14px;letter-spacing:1px}
+.mb label{font-size:10px;color:var(--sc);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
+.mb input,.mb select{width:100%;padding:10px 12px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:3px;font-size:13px;margin-bottom:10px;font-family:Lato,sans-serif}
+.mb input::placeholder{color:var(--mt)}
+.ma{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.mcnl{padding:8px 16px;background:transparent;color:var(--mt);border:1px solid #333;border-radius:3px;cursor:pointer;font-size:12px}
+.msub{padding:8px 16px;background:var(--pk);color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-weight:700}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--gn);color:#000;padding:10px 20px;border-radius:4px;font-size:12px;font-weight:700;z-index:200;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ld{text-align:center;padding:60px 20px;color:var(--mt)}
+.sp{width:30px;height:30px;border:3px solid #333;border-top-color:var(--pk);border-radius:50%;animation:spn .8s linear infinite;margin:0 auto 12px}
+@keyframes spn{to{transform:rotate(360deg)}}
+@media(max-width:768px){.mrow{flex-direction:column}.mc{min-width:auto}.hdr{flex-direction:column;align-items:flex-start}.dg{grid-template-columns:1fr}.nav-b{font-size:11px;padding:6px 12px}}
+</style>
+</head>
+<body>
+<div class="bg-r r1"></div><div class="bg-r r2"></div><div class="bg-r r3"></div>
+<div class="dash" id="app"><div class="ld"><div class="sp"></div><div class="bb" style="font-size:16px;letter-spacing:2px">LOADING FUNDING INTELLIGENCE...</div></div></div>
+<div id="tc"></div>
+<script>
+const SID='1bz8or3CviDNZBOfKAGsLPXwqHzkkMH6eIkmCBoBoEA0',AK='AIzaSyCp3ADGwVPjPnVA1CUkuLpgMueI0hOYgCE';
+const STATS=['Prospect','EOI','Applied for','Secured','Unsuccessful'];
+const SBC={Secured:'sb-sec','Applied for':'sb-app',Prospect:'sb-pro',EOI:'sb-pro',Unsuccessful:'sb-uns'};
+let S={tab:'overview',yr:'2026',sF:'all',yF:'all',tF:'all',modal:null,sd:null,nid:100};
+
+const PIPE=[
+{id:1,f:"Loved and Wanted Fund",tm:"Zoe",ph:"Application",fo:"Core",is:"Statutory",yr:2026,st:"Secured",w:1,v:60000},
+{id:2,f:"The Lewis Family Foundation",tm:"Zoe",ph:"Application",fo:"Core",is:"Individual",yr:2026,st:"Secured",w:1,v:40000},
+{id:3,f:"Sage Publishing",tm:"Molly",ph:"Re-application",fo:"Core",is:"Corporate",yr:2026,st:"Secured",w:1,v:20000},
+{id:4,f:"The Spencer Strauss Fund",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Secured",w:1,v:20000},
+{id:5,f:"Paul Hamlyn Foundation",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.2,v:150000},
+{id:6,f:"National Lottery Reaching Communities",tm:"Zoe",ph:"Applied for",fo:"Core",is:"T&F",yr:2027,st:"Applied for",w:.03,v:500000},
+{id:7,f:"Educational Opportunities Fund",tm:"Zoe",ph:"Stage One",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:90000},
+{id:8,f:"ACE NLPG (Blaze FM tour)",tm:"Kashvi",ph:"Application",fo:"Blaze FM",is:"T&F",yr:2026,st:"Applied for",w:.2,v:62000},
+{id:9,f:"Compass Wellbeing",tm:"Zoe",ph:"Application",fo:"Core",is:"Statutory",yr:2026,st:"Applied for",w:.1,v:50000},
+{id:10,f:"Tweed Family Charitable Trust",tm:"Kashvi",ph:"Stage One",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:30000},
+{id:11,f:"Weavers Company",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:25000},
+{id:12,f:"Christina Smith Foundation",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:25000},
+{id:13,f:"Cherry Family Foundation",tm:"Kashvi",ph:"EOI",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:20000},
+{id:14,f:"Kristina Martin Charitable Trust",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:20000},
+{id:15,f:"The Laing Family Trust",tm:"Zoe",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:20000},
+{id:16,f:"TELUS",tm:"Kashvi",ph:"Application",fo:"Core",is:"Corporate",yr:2026,st:"Applied for",w:.1,v:20000},
+{id:17,f:"Grant Thornton",tm:"Kashvi",ph:"EOI",fo:"Core",is:"Corporate",yr:2026,st:"Applied for",w:.2,v:20000},
+{id:18,f:"Hiscox Foundation",tm:"Zoe",ph:"Report",fo:"Core",is:"Corporate",yr:2026,st:"Applied for",w:.5,v:10000},
+{id:19,f:"Cadogan Charity",tm:"Zoe",ph:"Letter",fo:"Productions",is:"T&F",yr:2026,st:"Applied for",w:.1,v:10000},
+{id:20,f:"Schroder Charitable Foundation",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.1,v:5000},
+{id:21,f:"WillHoughton Foundation",tm:"Zoe",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Applied for",w:.2,v:2000},
+{id:22,f:"Esmée Fairbairn Foundation",tm:"Kashvi",ph:"EOI",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.05,v:200000},
+{id:23,f:"Trust for London",tm:"Kashvi",ph:"EOI",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.05,v:200000},
+{id:24,f:"Thompson Family Charitable Trust",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.1,v:120000},
+{id:25,f:"John Ellerman Foundation",tm:"Zoe",ph:"Research",fo:"Blaze FM",is:"T&F",yr:2027,st:"Prospect",w:.1,v:100000},
+{id:26,f:"Mary Kinross Charitable Trust",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.05,v:90000},
+{id:27,f:"The Bromley Trust",tm:"Zoe",ph:"EOI",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.05,v:90000},
+{id:28,f:"Matchroom Foundation",tm:"Zoe",ph:"Application",fo:"Gypsy / Coward",is:"Corporate",yr:2027,st:"Prospect",w:.2,v:50000},
+{id:29,f:"Sony Social Justice Fund",tm:"Kashvi",ph:"EOI",fo:"Blaze FM",is:"Corporate",yr:2026,st:"Prospect",w:.05,v:50000},
+{id:30,f:"Blagrave Trust",tm:"Kashvi",ph:"Application",fo:"DoLs",is:"T&F",yr:2026,st:"Prospect",w:.1,v:50000},
+{id:31,f:"Charles Plater Trust",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.1,v:50000},
+{id:32,f:"Kilburn and Strode",tm:"Zoe",ph:"Application",fo:"Core",is:"Corporate",yr:2026,st:"Prospect",w:.1,v:30000},
+{id:33,f:"Souter Charitable Trust",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.1,v:30000},
+{id:34,f:"Wolfson Foundation",tm:"Kashvi",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.1,v:20000},
+{id:35,f:"Mount Fund",tm:"Zoe",ph:"Application",fo:"Core",is:"T&F",yr:2026,st:"Prospect",w:.1,v:20000},
+{id:36,f:"JP Morgan Foundation",tm:"Kashvi",ph:"EOI",fo:"Core",is:"Corporate",yr:2027,st:"Prospect",w:.05,v:30000},
+{id:37,f:"The Considered Ask",tm:"Kashvi",ph:"EOI",fo:"Core",is:"Corporate",yr:2027,st:"Prospect",w:.05,v:50000},
+];
+
+const DISC=[
+{n:"Garfield Weston Foundation",s:74,t:"T&F",a:"Clean Break, Chickenshed, Cardboard Citizens",r:"£10k–£100k",rl:["Core"]},
+{n:"BBC Children in Need",s:71,t:"Corporate",a:"Company Three, Only Connect",r:"£10k–£50k",rl:["Programme"]},
+{n:"The Tudor Trust",s:68,t:"T&F",a:"Only Connect, Settle, INQUEST",r:"£25k–£150k",rl:["Core","Advocacy"]},
+{n:"Lloyds Bank Foundation",s:65,t:"Corporate",a:"Become, Settle",r:"£50k–£100k",rl:["Core"]},
+{n:"Oak Foundation",s:62,t:"T&F",a:"INQUEST, Become",r:"£50k–£300k",rl:["Advocacy"]},
+{n:"The Mercers' Company",s:58,t:"T&F",a:"Clean Break, Synergy Theatre",r:"£5k–£30k",rl:["Programme"]},
+{n:"John Lyon's Charity",s:55,t:"T&F",a:"Company Three, Chickenshed",r:"£10k–£50k",rl:["Programme"]},
+{n:"A B Charitable Trust",s:52,t:"T&F",a:"INQUEST, Only Connect",r:"£10k–£30k",rl:["Advocacy"]},
+];
+
+const OVER=[
+{n:"City Bridge Foundation",c:5,o:["Cardboard Citizens","Clean Break","Company Three","Chickenshed","Only Connect"],s:72},
+{n:"Garfield Weston Foundation",c:4,o:["Clean Break","Chickenshed","Cardboard Citizens","Become"],s:74},
+{n:"BBC Children in Need",c:3,o:["Company Three","Only Connect","Chickenshed"],s:71},
+{n:"The Tudor Trust",c:3,o:["Only Connect","Settle","INQUEST"],s:68},
+{n:"Esmée Fairbairn Foundation",c:3,o:["Clean Break","INQUEST","Settle"],s:65},
+{n:"Arts Council England",c:6,o:["Cardboard Citizens","Clean Break","Synergy Theatre","Company Three","Chickenshed","Only Connect"],s:60},
+];
+
+const COMPS=[
+{n:"Cardboard Citizens",cat:"Arts + Youth",fc:18,l:"Jan 2026"},{n:"Clean Break",cat:"Arts + Youth",fc:24,l:"Feb 2026"},
+{n:"Synergy Theatre",cat:"Arts + Youth",fc:12,l:"Dec 2025"},{n:"Company Three",cat:"Arts + Youth",fc:15,l:"Nov 2025"},
+{n:"Chickenshed",cat:"Arts + Youth",fc:22,l:"Jan 2026"},{n:"Only Connect",cat:"Arts + Youth",fc:20,l:"Dec 2025"},
+{n:"Settle",cat:"Care / Advocacy",fc:11,l:"Nov 2025"},{n:"Become",cat:"Care / Advocacy",fc:16,l:"Jan 2026"},
+{n:"INQUEST",cat:"Care / Advocacy",fc:14,l:"Dec 2025"},
+];
+
+const ALRT=[
+{t:"Paul Hamlyn — Ideas & Pioneers opens Mar 1",p:"urgent",w:"2h ago"},
+{t:"Garfield Weston found in 3 comparable accounts",p:"high",w:"5h ago"},
+{t:"Tudor Trust scores 68% alignment",p:"normal",w:"1d ago"},
+{t:"Clean Break filed 2024/25 accounts",p:"normal",w:"2d ago"},
+{t:"Weavers Company deadline in 14 days",p:"high",w:"3d ago"},
+];
+
+const SRCS=[
+{n:"360Giving GrantNav",d:"Bulk database of 800k+ UK grants. Search by theme, size, location.",st:"planned",v:"Discovery engine",c:"Database"},
+{n:"Charity Commission API",d:"Free API with charitable objects for every UK charity. Auto-enriches alignment scoring.",st:"planned",v:"Enrichment",c:"Database"},
+{n:"GLA / Mayor's Fund",d:"London statutory funding for youth services and cultural programmes.",st:"live",v:"£20k–£100k",c:"Statutory"},
+{n:"Ministry of Justice — Youth Justice",d:"MoJ funds for orgs working with young people in/leaving criminal justice.",st:"idea",v:"£50k–£500k",c:"Statutory"},
+{n:"NHS England — CYP Mental Health",d:"Commissioning for children's mental health. CAMHS transition advocacy relevant.",st:"idea",v:"£30k–£200k",c:"Statutory"},
+{n:"London Community Foundation",d:"Place-based giving for London boroughs. Multiple funds open year-round.",st:"live",v:"£5k–£50k",c:"Community"},
+{n:"Crowdfunding Campaigns",d:"For specific campaigns: DoLs advocacy, Blaze FM tour. Builds engagement.",st:"idea",v:"£5k–£30k",c:"Individual"},
+{n:"Social Investment",d:"Repayable social investment for orgs with earned income. TBHMB expansion.",st:"idea",v:"£50k–£250k",c:"Social Investment"},
+{n:"UKRI Research Partnerships",d:"Universities fund research into your outcomes. You provide access.",st:"idea",v:"£20k–£100k",c:"Academic"},
+{n:"Corporate Volunteering Days",d:"Companies pay for employee volunteering with young people.",st:"idea",v:"£500–£2k/day",c:"Corporate"},
+{n:"Legacy Giving",d:"Long-term unrestricted income. Requires website and literature setup.",st:"idea",v:"Avg £5k–£50k",c:"Individual"},
+{n:"Creative Europe / British Council",d:"International funding for touring or cross-border projects.",st:"idea",v:"€10k–€200k",c:"International"},
+];
+
+// ── Helpers ──────────────────────────────────────────────────
+const fm=n=>n!=null?'£'+Math.abs(n).toLocaleString():'—';
+const fs=n=>{if(n==null)return'—';return(n<0?'-':'')+fm(n)};
+const pc=n=>n!=null?(n*100).toFixed(0)+'%':'—';
+const vc=n=>n<0?'var(--rd)':n>0?'var(--gn)':'#fff';
+const inP=name=>PIPE.some(p=>p.f.toLowerCase()===name.toLowerCase());
+const esc=s=>s.replace(/'/g,"\\'");
+
+function toast(m){const c=document.getElementById('tc');const d=document.createElement('div');d.className='toast';d.textContent=m;c.appendChild(d);setTimeout(()=>d.remove(),2500)}
+
+function addP(name,type,v,yr){
+  if(inP(name)){toast('"'+name+'" already in pipeline');return}
+  PIPE.push({id:S.nid++,f:name,tm:'—',ph:'Research',fo:'Core',is:type||'T&F',yr:yr||2026,st:'Prospect',w:.05,v:v||0});
+  toast('Added "'+name+'" to pipeline');R();
+}
+
+function toggleSt(id){
+  const p=PIPE.find(x=>x.id===id);if(!p)return;
+  const i=STATS.indexOf(p.st);p.st=STATS[(i+1)%STATS.length];
+  if(p.st==='Secured')p.w=1;else if(p.st==='Unsuccessful')p.w=0;R();
+}
+
+function parseNum(v){if(!v)return 0;let s=String(v).replace(/[£,%\s]/g,'');if(s.startsWith('(')&&s.endsWith(')'))s='-'+s.slice(1,-1);s=s.replace(/,/g,'');const n=parseFloat(s);return isNaN(n)?0:n}
+function gC(d,r,c){return d&&d[r]&&d[r][c]!==undefined?parseNum(d[r][c]):0}
+function gS(d,r,c){return d&&d[r]&&d[r][c]!==undefined?String(d[r][c]).trim():''}
+
+async function fetchSD(){
+  try{
+    const rng=['Claude data!A1:C30','Fundraising Targets!A1:H30','3-year income overview!A60:L80'];
+    const urls=rng.map(r=>`https://sheets.googleapis.com/v4/spreadsheets/${SID}/values/${encodeURIComponent(r)}?key=${AK}`);
+    const res=await Promise.all(urls.map(u=>fetch(u)));
+    if(!res.every(r=>r.ok))throw new Error('API fail');
+    const[cd,ft,ro]=await Promise.all(res.map(x=>x.json()));
+    return parseSD(cd.values||[],ft.values||[],ro.values||[]);
+  }catch(e){console.error('Sheet:',e);return null}
+}
+
+function parseSD(cl,tg,ro){
+  const NM=['Corporate','Individual','T&F','Statutory','Earned','Tax Relief','Events','Interest'];
+  const p={
+    2026:{tgt:gC(cl,1,0),exp:gC(cl,26,0),sur:gC(cl,22,0),sec:gC(cl,7,0),pct:gC(cl,19,0),gap:gC(cl,16,0),wp:gC(cl,13,0),tp:gC(cl,10,0),iT:Array.from({length:8},(_,i)=>gC(tg,8+i,5)),iA:Array.from({length:8},(_,i)=>gC(tg,20+i,5))},
+    2027:{tgt:gC(cl,1,1),exp:gC(cl,26,1),sur:gC(cl,22,1),sec:gC(cl,7,1),pct:gC(cl,19,1),gap:gC(cl,16,1),wp:gC(cl,13,1),iT:Array.from({length:8},(_,i)=>gC(tg,8+i,7)),iA:Array.from({length:8},(_,i)=>gC(tg,20+i,7))},
+    2028:{tgt:gC(cl,1,2),exp:gC(cl,26,2),sur:gC(cl,22,2),sec:gC(cl,7,2)},
+    nm:NM,roles:[]
+  };
+  for(let i=0;i<10;i++){const nm=gS(ro,4+i,1);if(nm)p.roles.push({n:nm,g26:gC(ro,4+i,9),g27:gC(ro,4+i,11)})}
+  p.oh26=gC(ro,17,9);p.oh27=gC(ro,17,11);
+  return p;
+}
+
+// ── Render ──────────────────────────────────────────────────
+let CI=null;
+function R(){
+  const a=document.getElementById('app');const d=S.sd;const y=d?d[S.yr]:null;
+  const gk=S.yr==='2027'?'g27':'g26';
+  let h='';
+
+  // Header
+  h+=`<div class="hdr"><div><div class="hdr-t"><span>TBH</span> FUNDING INTELLIGENCE</div><div class="hdr-s">The Big House · Live Data Dashboard</div></div><div class="hdr-r"><button class="scan" onclick="toast('Scanning comparables...')">SCAN</button><div style="font-size:10px;color:var(--mt)">Last scan: 2h ago</div></div></div>`;
+
+  // Nav
+  const tabs=[{k:'overview',l:'OVERVIEW'},{k:'pipeline',l:'PIPELINE'},{k:'discovery',l:'DISCOVERY'},{k:'roles',l:'ROLE MATCH'},{k:'overlap',l:'FUNDER OVERLAP'},{k:'sources',l:'FUNDING SOURCES'},{k:'comparables',l:'MONITORED ORGS'},{k:'alerts',l:'ALERTS',b:ALRT.length}];
+  h+='<div class="nav">';tabs.forEach(t=>{h+=`<button class="nav-b ${S.tab===t.k?'on':''}" onclick="S.tab='${t.k}';R()">${t.l}${t.b?`<span class="badge">${t.b}</span>`:''}</button>`});h+='</div>';
+
+  // Year tabs
+  if(['overview','roles'].includes(S.tab)){h+='<div class="yr-tabs">';['2026','2027','2028'].forEach(v=>{h+=`<button class="yr-b ${S.yr===v?'on':''}" onclick="S.yr='${v}';R()">${v}</button>`});h+='</div>'}
+
+  // ── OVERVIEW ──
+  if(S.tab==='overview'){
+    if(!d)h+='<div class="ld"><div class="sp"></div>Connecting to Google Sheets...</div>';
+    else{
+      h+=`<div class="sec-t">FINANCIAL OVERVIEW</div><div class="mrow">`;
+      h+=mc('INCOME TARGET',y?.tgt,'#fff')+mc('FORECAST EXPENDITURE',y?.exp,vc(-(y?.exp||0)))+mc('PLANNED SURPLUS / DEFICIT',y?.sur,vc(y?.sur||0));
+      h+='</div><div class="sec-t">SECURED INCOME AGAINST TARGET</div><div class="mrow">';
+      h+=mc('SECURED INCOME',y?.sec,'#fff');
+      const pv=y?.pct;h+=`<div class="mc"><div class="mc-l">TARGET REACHED</div><div class="mc-v">${pv?(typeof pv==='number'&&pv<1?(pv*100).toFixed(0)+'%':Math.round(pv)+'%'):'—'}</div></div>`;
+      h+=mc('FUNDING GAP',y?.gap,vc(y?.gap||0));
+      h+='</div>';
+      if(S.yr!=='2028'){
+        h+='<div class="sec-t">PIPELINE ANALYSIS</div><div class="mrow">';
+        h+=mc('WEIGHTED PIPELINE',y?.wp,'#fff');
+        const cg=y?.wp&&y?.gap?(y.wp+y.gap>=0):null;
+        h+=`<div class="mc"><div class="mc-l">PIPELINE COVERS GAP</div><div class="mc-v" style="color:${cg?'var(--gn)':'var(--rd)'}">${cg===null?'—':cg?'YES':'NO'}</div></div>`;
+        if(S.yr==='2026'&&y?.tp)h+=mc('TOTAL PIPELINE',y.tp,'#fff');
+        else h+=`<div class="mc"><div class="mc-l">OUTPUT BY QUARTER</div><div style="display:flex;gap:4px;margin-top:6px"><button class="yr-b on" style="font-size:10px;padding:3px 10px">Q1</button><button class="yr-b" style="font-size:10px;padding:3px 10px">Q2</button><button class="yr-b" style="font-size:10px;padding:3px 10px">Q3</button><button class="yr-b" style="font-size:10px;padding:3px 10px">Q4</button></div><div style="font-size:11px;color:var(--mt);margin-top:6px">Coming soon</div></div>`;
+        h+='</div>';
+      }
+      // Gap bars
+      h+='<div style="background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px;margin:14px 0"><div class="sec-t" style="margin-bottom:10px">FUNDING GAP TRACKER</div>';
+      if(d[2026])h+=gapB('2026',d[2026].sec,d[2026].tgt,d[2026].wp);
+      if(d[2027])h+=gapB('2027',d[2027].sec,d[2027].tgt,d[2027].wp);
+      h+='</div>';
+      // Chart
+      if(y?.iT)h+=`<div class="cc"><div class="sec-t">INCOME STREAMS: TARGET VS ACTUAL (${S.yr})</div><canvas id="ic" height="280"></canvas></div>`;
+      // Role gap table
+      if(d.roles&&d.roles.length>0&&S.yr!=='2028'){
+        h+='<div class="cc"><div class="sec-t">INCOME GAP BY ROLE ('+S.yr+')</div><div class="tw"><table style="min-width:400px"><thead><tr><th>ROLE</th><th style="text-align:right">GAP</th></tr></thead><tbody>';
+        d.roles.forEach(r=>{const g=r[gk];h+=`<tr><td style="font-weight:600">${r.n}</td><td class="bb" style="font-size:14px;text-align:right;color:${vc(g)}">${fs(g)}</td></tr>`});
+        const oh=S.yr==='2026'?d.oh26:d.oh27;
+        h+=`<tr style="border-top:2px solid var(--bd)"><td style="font-weight:700">Overheads</td><td class="bb" style="font-size:14px;text-align:right;color:${vc(oh)}">${fs(oh)}</td></tr>`;
+        h+='</tbody></table></div></div>';
+      }
+    }
+  }
+
+  // ── PIPELINE ──
+  if(S.tab==='pipeline'){
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px"><div class="flt" style="margin-bottom:0">';
+    ['all','Secured','Applied for','Prospect','Unsuccessful'].forEach(s=>{h+=`<button class="fb ${S.sF===s?'on':''}" onclick="S.sF='${s}';R()">${s==='all'?'All':s}</button>`});
+    h+='<div class="fsep"></div>';['all','2026','2027'].forEach(v=>{h+=`<button class="fb ${S.yF===v?'on':''}" onclick="S.yF='${v}';R()">${v==='all'?'All years':v}</button>`});
+    h+='<div class="fsep"></div>';['all','Kashvi','Zoe','James','Molly'].forEach(t=>{h+=`<button class="fb ${S.tF===t?'on':''}" onclick="S.tF='${t}';R()">${t==='all'?'All':t}</button>`});
+    h+=`</div><button class="scan" style="font-size:11px;padding:6px 14px;white-space:nowrap" onclick="S.modal='prospect';R()">+ ADD PROSPECT</button></div>`;
+
+    let fl=PIPE.filter(p=>{if(S.sF!=='all'&&p.st!==S.sF)return false;if(S.yF!=='all'&&p.yr!==parseInt(S.yF))return false;if(S.tF!=='all'&&p.tm!==S.tF)return false;return true}).sort((a,b)=>(b.v*b.w)-(a.v*a.w));
+    h+='<div class="tw"><table><thead><tr>';['FUNDER','OWNER','PHASE','FOCUS','TYPE','YEAR','STATUS','ASK','PROB','WEIGHTED'].forEach(x=>{h+=`<th>${x}</th>`});h+='</tr></thead><tbody>';
+    fl.forEach(p=>{
+      const wv=Math.round(p.v*p.w),fc=p.fo==='Blaze FM'?'var(--tl)':p.fo==='DoLs'?'var(--bl)':p.fo==='Gypsy / Coward'?'var(--pk)':'var(--sc)',pcl=p.w>=.5?'var(--gn)':p.w>=.1?'var(--yl)':'var(--rd)',sc=SBC[p.st]||'';
+      h+=`<tr><td style="font-weight:600;color:#fff">${p.f}</td><td style="color:var(--sc)">${p.tm}</td><td style="color:var(--sc)">${p.ph}</td><td style="color:${fc}">${p.fo}</td><td style="color:var(--sc)">${p.is}</td><td style="color:var(--sc)">${p.yr||'—'}</td><td><span class="sb ${sc}" onclick="toggleSt(${p.id})"><span class="dt"></span>${p.st}</span></td><td class="bb" style="font-size:14px">${fm(p.v)}</td><td class="bb" style="font-size:14px;color:${pcl}">${pc(p.w)}</td><td class="bb" style="font-size:14px;color:var(--tl);font-weight:700">${fm(wv)}</td></tr>`;
+    });
+    h+=`</tbody></table><div class="tf"><span style="color:var(--mt)">${fl.length} entries</span><span style="color:var(--tl);font-weight:700">Weighted total: ${fm(fl.reduce((a,p)=>a+Math.round(p.v*p.w),0))}</span></div></div>`;
+  }
+
+  // ── DISCOVERY ──
+  if(S.tab==='discovery'){
+    h+='<div style="font-size:12px;color:var(--sc);margin-bottom:12px">Funders discovered from comparable org accounts — not yet in your pipeline.</div><div class="dg">';
+    DISC.forEach(d=>{const cl=d.s>=70?'hi':d.s>=50?'md':'lo',co=d.s>=70?'var(--gn)':d.s>=50?'var(--yl)':'var(--rd)',ip=inP(d.n);
+      h+=`<div class="dc ${cl}"><div style="display:flex;justify-content:space-between"><div><div style="font-size:13px;font-weight:700">${d.n}</div><div style="font-size:10px;color:var(--mt);margin-top:2px">${d.t} · ${d.r}</div></div><span class="bb" style="font-size:22px;color:${co}">${d.s}%</span></div><div style="font-size:10px;color:var(--sc);margin-top:6px">Also funds: ${d.a}</div><div style="display:flex;gap:6px;margin-top:8px">${ip?'<span style="font-size:10px;color:var(--gn);font-weight:700">✓ In pipeline</span>':`<button class="abtn" onclick="addP('${esc(d.n)}','${d.t}',0,2026)">ADD TO PIPELINE</button>`}<button class="dbtn">Dismiss</button></div></div>`;
+    });h+='</div>';
+  }
+
+  // ── ROLE MATCH ──
+  if(S.tab==='roles'){
+    h+='<div style="font-size:12px;color:var(--sc);margin-bottom:12px">Roles with a funding gap. Click a funder tag to add to pipeline.</div>';
+    if(d&&d.roles){
+      const uf=d.roles.filter(r=>r[gk]<0);
+      uf.forEach(role=>{
+        const mf=DISC.filter(f=>f.rl.some(rm=>role.n.toLowerCase().includes(rm.toLowerCase())||rm==='Core'));
+        h+=`<div class="rc"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:14px;font-weight:700">${role.n}</div><span class="bb" style="font-size:20px;color:var(--rd)">${fs(role[gk])}</span></div><div style="font-size:10px;color:var(--pk);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Suggested funders:</div><div>${mf.length>0?mf.map(f=>{const ip=inP(f.n);return`<span class="rft ${ip?'done':''}" ${ip?'':`onclick="addP('${esc(f.n)}','${f.t}',0,${parseInt(S.yr)})"`}>${ip?'✓ ':''}${f.n} (${f.s}%)${ip?'':' +'}</span>`}).join(''):'<span style="color:var(--mt)">No matches — run scan</span>'}</div></div>`;
+      });
+      const ff=d.roles.filter(r=>r[gk]>=0);
+      if(ff.length>0){h+='<div class="sec-t" style="margin-top:16px">FUNDED ROLES</div>';ff.forEach(r=>{h+=`<div class="rc" style="border-left:3px solid var(--gn)"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:14px;font-weight:700">${r.n}</div><span class="bb" style="font-size:20px;color:var(--gn)">${fs(r[gk])}</span></div></div>`})}
+    }else h+='<div class="ld"><div class="sp"></div>Loading roles...</div>';
+  }
+
+  // ── FUNDER OVERLAP ──
+  if(S.tab==='overlap'){
+    h+='<div style="font-size:12px;color:var(--sc);margin-bottom:12px">Funders supporting multiple comparable orgs — high overlap = strong signal.</div>';
+    OVER.forEach(o=>{const ip=inP(o.n);
+      h+=`<div class="oc"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:700">${o.n}</div><div style="font-size:10px;color:var(--mt)">Alignment: ${o.s}%</div></div><div style="display:flex;align-items:center;gap:10px"><span class="bb" style="font-size:18px;color:var(--pk)">${o.c} ORGS</span>${ip?'<span style="font-size:10px;color:var(--gn);font-weight:700">✓ Pipeline</span>':`<button class="abtn" onclick="addP('${esc(o.n)}','T&F',0,2026)">ADD</button>`}</div></div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">${o.o.map(x=>`<span class="ot">${x}</span>`).join('')}</div></div>`;
+    });
+  }
+
+  // ── FUNDING SOURCES ──
+  if(S.tab==='sources'){
+    h+='<div style="font-size:12px;color:var(--sc);margin-bottom:12px">Beyond trusts & corporates — additional streams to diversify income.</div>';
+    [...new Set(SRCS.map(x=>x.c))].forEach(cat=>{
+      h+=`<div class="sec-t" style="margin-top:16px">${cat.toUpperCase()}</div>`;
+      SRCS.filter(x=>x.c===cat).forEach(s=>{
+        const sc=s.st==='live'?'sc-live':s.st==='planned'?'sc-plan':'sc-idea';
+        h+=`<div class="sc-c"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px"><div style="font-size:14px;font-weight:700">${s.n}</div><span class="sc-st ${sc}">${s.st.toUpperCase()}</span></div><div style="font-size:11px;color:var(--sc);margin-bottom:8px">${s.d}</div><div style="font-size:12px;color:var(--tl);font-weight:700">${s.v}</div></div>`;
+      });
+    });
+  }
+
+  // ── COMPARABLES ──
+  if(S.tab==='comparables'){
+    h+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px"><div style="font-size:12px;color:var(--sc)">Organisations monitored for funder intelligence.</div><button class="scan" style="font-size:11px;padding:6px 14px" onclick="S.modal='org';R()">+ ADD ORG</button></div>`;
+    h+='<div class="tw"><table style="min-width:600px"><thead><tr><th>ORGANISATION</th><th>CATEGORY</th><th>FUNDERS</th><th>LAST SCRAPED</th><th></th></tr></thead><tbody>';
+    COMPS.forEach(c=>{h+=`<tr><td style="font-weight:600">${c.n}</td><td style="color:var(--sc)">${c.cat}</td><td style="color:var(--tl);font-weight:700">${c.fc}</td><td style="color:var(--sc)">${c.l}</td><td><button class="fb" onclick="toast('Re-scanning ${esc(c.n)}...')">Re-scan</button></td></tr>`});
+    h+='</tbody></table></div>';
+  }
+
+  // ── ALERTS ──
+  if(S.tab==='alerts'){
+    h+='<div style="background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:16px">';
+    ALRT.forEach(a=>{const dc=a.p==='urgent'?'var(--rd)':a.p==='high'?'var(--yl)':'var(--bl)';h+=`<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;background:${dc}"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">${a.t}</div><div style="font-size:9px;color:var(--mt)">${a.w}</div></div></div>`});
+    h+='</div>';
+  }
+
+  // ── MODALS ──
+  if(S.modal==='prospect')h+=`<div class="mo" onclick="if(event.target===this){S.modal=null;R()}"><div class="mb"><h3>ADD NEW PROSPECT</h3><label>Funder name</label><input placeholder="e.g. The Rayne Foundation" id="np-f"><label>Ask amount (£)</label><input type="number" placeholder="e.g. 25000" id="np-v"><label>Income type</label><select id="np-t"><option value="T&F">Trusts & Foundations</option><option value="Corporate">Corporate</option><option value="Statutory">Statutory</option><option value="Individual">Individual</option></select><label>Year</label><select id="np-y"><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select><label>Focus area</label><select id="np-fo"><option value="Core">Core</option><option value="Blaze FM">Blaze FM</option><option value="DoLs">DoLs</option><option value="Productions">Productions</option></select><label>Team member</label><select id="np-tm"><option value="Kashvi">Kashvi</option><option value="Zoe">Zoe</option><option value="James">James</option><option value="Molly">Molly</option><option value="—">Unassigned</option></select><div class="ma"><button class="mcnl" onclick="S.modal=null;R()">Cancel</button><button class="msub" onclick="addProspect()">Add to Pipeline</button></div></div></div>`;
+
+  if(S.modal==='org')h+=`<div class="mo" onclick="if(event.target===this){S.modal=null;R()}"><div class="mb"><h3>ADD ORGANISATION TO MONITOR</h3><label>Organisation name</label><input placeholder="e.g. Synergy Theatre Project" id="o-n"><label>Companies House number</label><input placeholder="Optional" id="o-ch"><label>Charity number</label><input placeholder="Optional" id="o-cc"><label>Category</label><select id="o-cat"><option value="Arts + Youth">Arts + Youth</option><option value="Care / Advocacy">Care / Advocacy</option><option value="Adjacent">Adjacent</option></select><div class="ma"><button class="mcnl" onclick="S.modal=null;R()">Cancel</button><button class="msub" onclick="addOrg()">Add & Scan</button></div></div></div>`;
+
+  a.innerHTML=h;
+  if(S.tab==='overview'&&d)setTimeout(mkChart,50);
+}
+
+// ── Metric card helper ──
+function mc(l,v,c){return`<div class="mc"><div class="mc-l">${l}</div><div class="mc-v" style="color:${c}">${fs(v)}</div></div>`}
+
+// ── Gap bar helper ──
+function gapB(yr,sec,tgt,wp){
+  if(!tgt)return'';sec=sec||0;wp=wp||0;const gap=tgt-sec,cov=wp>=gap,pS=Math.min(sec/tgt*100,100),pW=Math.min((sec+wp)/tgt*100,100);
+  return`<div class="gap-c"><div class="gap-h"><span style="font-size:12px;font-weight:700">${yr}</span><span style="font-size:10px;color:${cov?'var(--gn)':'var(--rd)'}">Gap: ${fm(gap)} ${cov?'✓ Covered':'✗ Not covered'}</span></div><div class="gap-trk"><div class="gap-w" style="width:${pW}%"></div><div class="gap-s" style="width:${pS}%"></div></div><div class="gap-f"><span>£0</span><span>Target: ${fm(tgt)}</span></div></div>`;
+}
+
+// ── Chart ──
+function mkChart(){
+  const cv=document.getElementById('ic');if(!cv||!S.sd)return;
+  const y=S.sd[S.yr];if(!y||!y.iT)return;
+  if(CI)CI.destroy();
+  CI=new Chart(cv,{type:'bar',data:{labels:S.sd.nm,datasets:[{label:'Target',data:y.iT,backgroundColor:'#68E2D4',borderRadius:3},{label:'Actual',data:y.iA,backgroundColor:'#E6007E',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#fff',font:{family:'Lato',size:11},padding:16}}},scales:{x:{ticks:{color:'#666',callback:v=>'£'+v.toLocaleString()},grid:{color:'#1a1a1a'}},y:{ticks:{color:'#fff',font:{family:'Bebas Neue',size:12}},grid:{display:false}}}}});
+}
+
+// ── Modal actions ──
+function addProspect(){
+  const f=document.getElementById('np-f')?.value;if(!f){toast('Enter a name');return}
+  PIPE.push({id:S.nid++,f,tm:document.getElementById('np-tm')?.value||'—',ph:'Research',fo:document.getElementById('np-fo')?.value||'Core',is:document.getElementById('np-t')?.value||'T&F',yr:parseInt(document.getElementById('np-y')?.value)||2026,st:'Prospect',w:.05,v:parseInt(document.getElementById('np-v')?.value)||0});
+  toast('Added "'+f+'" to pipeline');S.modal=null;R();
+}
+function addOrg(){
+  const n=document.getElementById('o-n')?.value;if(!n){toast('Enter a name');return}
+  COMPS.push({n,cat:document.getElementById('o-cat')?.value||'Adjacent',fc:0,l:'Pending...'});
+  toast('Added "'+n+'"');S.modal=null;R();
+}
+
+// ── Init ──
+async function init(){S.sd=await fetchSD();R()}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
