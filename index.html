@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TBH Funding Intelligence | The Big House</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--pk:#E6007E;--tl:#68E2D4;--yl:#F3D245;--bl:#42AEF0;--gn:#34d399;--rd:#ef4444;--cd:#111;--bd:#1a1a1a;--sc:#888;--mt:#555}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lato',-apple-system,sans-serif;background:#000;color:#fff;line-height:1.5;overflow-x:hidden}
+.bb{font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.bg-r{position:fixed;border:1.5px solid;pointer-events:none;z-index:0;opacity:.06}
+.r1{width:500px;height:350px;top:5%;right:-5%;transform:rotate(12deg);border-color:var(--tl)}
+.r2{width:450px;height:300px;top:6%;right:-4%;transform:rotate(12deg);border-color:var(--pk)}
+.r3{width:400px;height:280px;bottom:10%;left:-3%;transform:rotate(-8deg);border-color:var(--tl)}
+.dash{max-width:1600px;margin:0 auto;padding:16px 20px;position:relative;z-index:1}
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--bd);margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.hdr-t{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px}
+.hdr-t span{color:var(--pk)}
+.hdr-s{font-size:11px;color:var(--mt);margin-top:2px}
+.hdr-r{display:flex;align-items:center;gap:14px}
+.scan{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:8px 22px;background:var(--pk);color:#fff;border:none;cursor:pointer;border-radius:2px;transition:all .2s}
+.scan:hover{background:#ff1a8f;transform:translateY(-1px)}
+.nav{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.nav-b{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;padding:8px 18px;border:none;cursor:pointer;background:transparent;color:var(--mt);border-radius:2px;transition:all .15s}
+.nav-b.on{background:var(--pk);color:#fff}
+.nav-b:not(.on):hover{color:#fff;background:#1a1a1a}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 5px;border-radius:8px;background:var(--pk);color:#fff;font-size:9px;font-weight:700;margin-left:6px;font-family:Lato}
+.yr-tabs{display:flex;gap:4px;margin-bottom:14px}
+.yr-b{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:5px 16px;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:pointer;border-radius:2px;transition:all .15s}
+.yr-b.on{background:var(--tl);color:#000;border-color:var(--tl)}
+.sec-t{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--pk);letter-spacing:2px;margin-bottom:8px;padding-left:2px}
+.mrow{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.mc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px 16px;flex:1;min-width:160px}
+.mc-l{font-size:10px;color:var(--sc);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.mc-v{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1.1}
+.gap-c{margin-bottom:14px}
+.gap-h{display:flex;justify-content:space-between;margin-bottom:4px}
+.gap-trk{height:22px;background:#1a1a1a;border-radius:3px;overflow:hidden;position:relative}
+.gap-s{position:absolute;height:100%;background:var(--tl);border-radius:3px;opacity:.85;transition:width .5s}
+.gap-w{position:absolute;height:100%;background:var(--pk);border-radius:3px;opacity:.4;transition:width .5s}
+.gap-f{display:flex;justify-content:space-between;margin-top:2px;font-size:9px;color:var(--mt)}
+.tw{background:var(--cd);border:1px solid var(--bd);border-radius:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
+thead tr{background:#141414}
+th{padding:10px;text-align:left;color:var(--mt);font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;border-bottom:1px solid var(--bd);white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid #0d0d0d;white-space:nowrap}
+tr:hover td{background:#0d0d0d}
+.tf{padding:8px 10px;border-top:1px solid var(--bd);background:#141414;display:flex;justify-content:space-between;font-size:11px}
+.sb{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:700;cursor:pointer;user-select:none;transition:all .15s}
+.sb:hover{filter:brightness(1.2);transform:scale(1.05)}
+.sb .dt{width:5px;height:5px;border-radius:50%}
+.sb-sec{background:#0a2e1f;color:#6ee7b7}.sb-sec .dt{background:#34d399}
+.sb-app{background:#0f2744;color:#93c5fd}.sb-app .dt{background:#60a5fa}
+.sb-pro{background:#2a1f0a;color:#fbbf24}.sb-pro .dt{background:#f59e0b}
+.sb-eoi{background:#1a1a2e;color:#a78bfa}.sb-eoi .dt{background:#8b5cf6}
+.sb-uns{background:#2a0a0a;color:#fca5a5}.sb-uns .dt{background:#ef4444}
+.flt{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.fb{font-size:10px;padding:4px 10px;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:pointer;border-radius:3px;transition:all .15s}
+.fb.on{border-color:var(--tl);color:var(--tl);background:rgba(104,226,212,.08)}
+.fsep{width:1px;height:16px;background:var(--bd);margin:0 2px}
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.dc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px;border-left:3px solid var(--tl)}
+.dc.hi{border-left-color:var(--gn)}.dc.md{border-left-color:var(--yl)}.dc.lo{border-left-color:var(--rd)}
+.abtn{font-size:10px;padding:4px 12px;background:var(--pk);color:#fff;border:none;border-radius:3px;cursor:pointer;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.abtn:hover{background:#ff1a8f}
+.dbtn{font-size:10px;padding:4px 12px;background:transparent;color:var(--mt);border:1px solid var(--bd);border-radius:3px;cursor:pointer}
+.rc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px;margin-bottom:10px}
+.rft{display:inline-block;padding:2px 8px;background:rgba(104,226,212,.1);color:var(--tl);border-radius:3px;font-size:10px;margin:2px 4px 2px 0;cursor:pointer;transition:background .15s}
+.rft:hover{background:rgba(104,226,212,.2)}
+.rft.done{opacity:.6;cursor:default;background:rgba(52,211,153,.1);color:var(--gn)}
+.oc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:12px;margin-bottom:8px}
+.ot{font-size:9px;padding:2px 6px;background:#1a1a1a;color:var(--sc);border-radius:2px;display:inline-block;margin:1px}
+.sc-c{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:16px;margin-bottom:10px}
+.sc-st{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap}
+.sc-live{background:#0a2e1f;color:#6ee7b7}.sc-plan{background:#2a1f0a;color:#fbbf24}.sc-idea{background:#1a1a1a;color:#888}
+.cc{background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:16px;margin-bottom:16px}
+.mo{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:center;justify-content:center}
+.mb{background:var(--cd);border:1px solid var(--bd);border-radius:6px;padding:24px;width:90%;max-width:480px;max-height:90vh;overflow-y:auto}
+.mb h3{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:14px;letter-spacing:1px}
+.mb label{font-size:10px;color:var(--sc);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
+.mb input,.mb select{width:100%;padding:10px 12px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:3px;font-size:13px;margin-bottom:10px;font-family:Lato,sans-serif}
+.mb input::placeholder{color:var(--mt)}
+.ma{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.mcnl{padding:8px 16px;background:transparent;color:var(--mt);border:1px solid #333;border-radius:3px;cursor:pointer;font-size:12px}
+.msub{padding:8px 16px;background:var(--pk);color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-weight:700}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--gn);color:#000;padding:10px 20px;border-radius:4px;font-size:12px;font-weight:700;z-index:200;animation:fi .3s}
+.toast.err{background:var(--rd);color:#fff}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ld{text-align:center;padding:60px 20px;color:var(--mt)}
+.sp{width:30px;height:30px;border:3px solid #333;border-top-color:var(--pk);border-radius:50%;animation:spn .8s linear infinite;margin:0 auto 12px}
+@keyframes spn{to{transform:rotate(360deg)}}
+.prog{height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden;margin:8px 0}
+.prog-bar{height:100%;background:var(--tl);border-radius:2px;transition:width .3s}
+.src-tag{display:inline-block;font-size:8px;padding:1px 5px;border-radius:2px;background:#1a1a1a;color:var(--mt);margin-left:4px;vertical-align:middle}
+@media(max-width:768px){.mrow{flex-direction:column}.mc{min-width:auto}.hdr{flex-direction:column;align-items:flex-start}.dg{grid-template-columns:1fr}.nav-b{font-size:11px;padding:6px 12px}}
+</style>
+</head>
+<body>
+<div class="bg-r r1"></div><div class="bg-r r2"></div><div class="bg-r r3"></div>
+<div class="dash" id="app"><div class="ld"><div class="sp"></div><div class="bb" style="font-size:16px;letter-spacing:2px">LOADING FUNDING INTELLIGENCE...</div></div></div>
+<div id="tc"></div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+// Workbook 1: Cheryl Master Finance Plan 2026
+//   Tabs: FY 2026 overview, FY Income Budget 2026-2028_TYPE,
+//         2026 FUNDER income allocation, ACTUAL FUNDING SOURCE 2026 - 20
+//   Used by: Overview tab (financial metrics), Role Funding tab, Multi-Year tab
+const SID='1Ot4VA8ohPSH74ZJ5QY5ugRTaWbIkBNtl7s1IQT_Y25c',AK='AIzaSyCp3ADGwVPjPnVA1CUkuLpgMueI0hOYgCE';
+// Workbook 2: Fundraising Overview 2026
+//   Tabs: 2026 Pipeline, SUBMISSIONS 21-26, Current Funders & Reporting dat,
+//         Annual comparisons, Compartive quarterly breakdowns, Overview 2026
+//   Used by: Pipeline tab, Success Rates, Quarterly, Reporting, Overview (weighted pipeline + pending)
+const FID='12gR_OtqlJVutaZgvVsFdUi-jSMz7iTSYWxzyCTXU6rM';
+const TBH_CC='1151106';
+const STATS=['Prospect','EOI','Applied for','Secured','Unsuccessful'];
+const SBC={Secured:'sb-sec','Applied for':'sb-app',Prospect:'sb-pro',EOI:'sb-eoi',Unsuccessful:'sb-uns'};
+// Outcome colour map (for future SUBMISSIONS Outcome column once populated)
+const OBC={Awarded:'var(--gn)',Rejected:'var(--rd)',Pending:'var(--yl)',Withdrawn:'var(--mt)'};
+
+let S={tab:'overview',yr:'2026',sF:'all',yF:'all',tF:'all',modal:null,sd:null,fsd:null,nid:100,
+  fsLoading:false,fsError:null};
+
+// ═══════════════════════════════════════════════════════════════
+// PIPELINE — loaded from "2026 Pipeline" tab in Fundraising workbook
+// ═══════════════════════════════════════════════════════════════
+let PIPE=[];
+
+// ═══════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════
+const fm=n=>n!=null?'£'+Math.abs(n).toLocaleString():'—';
+const fs=n=>{if(n==null)return'—';return(n<0?'-':'')+fm(n)};
+const pc=n=>n!=null?(n*100).toFixed(0)+'%':'—';
+const vc=n=>n<0?'var(--rd)':n>0?'var(--gn)':'#fff';
+const inP=name=>PIPE.some(p=>p.f.toLowerCase()===name.toLowerCase());
+const esc=s=>s.replace(/'/g,"&#39;");
+
+function toast(m,err){const c=document.getElementById('tc');const d=document.createElement('div');d.className='toast'+(err?' err':'');d.textContent=m;c.appendChild(d);setTimeout(()=>d.remove(),3000)}
+
+function addP(name,type,v,yr){
+  if(inP(name)){toast('"'+name+'" already in pipeline');return}
+  PIPE.push({id:S.nid++,f:name,tm:'—',ph:'Research',fo:'Core',is:type||'T&F',yr:yr||2026,st:'Prospect',w:.05,v:v||0,src:'local'});
+  toast('Added "'+name+'" to pipeline');writePipeline();R();
+}
+
+function toggleSt(id){
+  const p=PIPE.find(x=>x.id===id);if(!p)return;
+  const i=STATS.indexOf(p.st);p.st=STATS[(i+1)%STATS.length];
+  if(p.st==='Secured')p.w=1;else if(p.st==='Unsuccessful')p.w=0;
+  writePipeline();R();
+}
+
+function parseNum(v){if(!v)return 0;let s=String(v).replace(/[£,%\s]/g,'');if(s.startsWith('(')&&s.endsWith(')'))s='-'+s.slice(1,-1);s=s.replace(/,/g,'');const n=parseFloat(s);return isNaN(n)?0:n}
+function gC(d,r,c){return d&&d[r]&&d[r][c]!==undefined?parseNum(d[r][c]):0}
+function gS(d,r,c){return d&&d[r]&&d[r][c]!==undefined?String(d[r][c]).trim():''}
+
+// ── Date parsing: handles Excel serials, ISO strings, and free text ──
+// Excel serial 1 = 1900-01-01, with Lotus 1-2-3 leap-year bug (treats 1900 as leap year)
+function excelSerialToDate(n){
+  const ms=(n-25569)*86400000; // 25569 = days from 1900-01-00 to 1970-01-01 accounting for Lotus bug
+  const d=new Date(ms);
+  return isNaN(d.getTime())?null:d;
+}
+function parseReportDue(v){
+  if(!v)return null;
+  const s=String(v).trim();
+  if(!s)return null;
+  // Pure number: Excel serial
+  const asNum=parseFloat(s);
+  if(!isNaN(asNum)&&/^\d+(\.\d+)?$/.test(s)&&asNum>40000&&asNum<60000){
+    return {date:excelSerialToDate(asNum),raw:s,precise:true};
+  }
+  // Try ISO / standard date strings
+  const d=new Date(s);
+  if(!isNaN(d.getTime())&&s.match(/\d{4}/))return{date:d,raw:s,precise:true};
+  // Try "31st January 2026" style
+  const m=s.match(/(\d{1,2})(?:st|nd|rd|th)?\s+(\w+)\s+(\d{4})/i);
+  if(m){
+    const d2=new Date(m[1]+' '+m[2]+' '+m[3]);
+    if(!isNaN(d2.getTime()))return{date:d2,raw:s,precise:true};
+  }
+  // Month + year only: "January 2026", "End of Nov 2026"
+  const m2=s.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\s+(\d{4})/i);
+  if(m2){
+    const d3=new Date('1 '+m2[1]+' '+m2[2]);
+    if(!isNaN(d3.getTime())){
+      // If "end of", push to end of month
+      if(/end\s+of/i.test(s)){d3.setMonth(d3.getMonth()+1);d3.setDate(0)}
+      return{date:d3,raw:s,precise:false};
+    }
+  }
+  // Cannot parse
+  return{date:null,raw:s,precise:false};
+}
+function fmtDate(d){
+  if(!d)return '—';
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+function daysUntil(d){
+  if(!d)return null;
+  return Math.round((d.getTime()-Date.now())/86400000);
+}
+// Parse "2/3 years" → {current:2,total:3}
+function parseYearProgress(s){
+  if(!s)return null;
+  const m=String(s).match(/(\d+)\s*\/\s*(\d+)\s*year/i);
+  if(m)return{current:parseInt(m[1]),total:parseInt(m[2])};
+  // "26 months" or "36 months"
+  const mm=String(s).match(/(\d+)\s*month/i);
+  if(mm)return{current:1,total:Math.ceil(parseInt(mm[1])/12),months:parseInt(mm[1])};
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GOOGLE SHEETS — CHERYL MASTER WORKBOOK
+// Tabs read:
+//   FY 2026 overview                                      — total forecast expenditure, reserves
+//   FY Income Budget 2026-2028_TYPE OF INCOME             — income by source, BUDGET vs ACTUAL per year
+//   2026 FUNDER income allocation                         — role matrix (BUDGET / UNCONFIRMED / CONFIRMED + per-funder)
+//   2027 FUNDER income allocation                         — same for 2027
+//   ACTUAL FUNDING SOURCE 2026 - 2029 income overview     — funder duration data, year-1/2/3 calendar splits
+// Used by: Overview tab, Role Funding tab, Multi-Year tab
+// ═══════════════════════════════════════════════════════════════
+async function fetchSD(){
+  try{
+    const ranges=[
+      "'FY 2026 overview'!A1:G10",
+      "'FY Income Budget 2026-2028_TYPE OF INCOME'!A1:L20",
+      "'2026 FUNDER income allocation'!A1:AE60",
+      "'2027 FUNDER income allocation'!A1:AE30",
+      "'ACTUAL FUNDING SOURCE 2026 - 2029 income overview'!A1:O50"
+    ];
+    const urls=ranges.map(r=>`https://sheets.googleapis.com/v4/spreadsheets/${SID}/values/${encodeURIComponent(r)}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER&key=${AK}`);
+    const res=await Promise.all(urls.map(u=>fetch(u)));
+    const jsons=await Promise.all(res.map((r,i)=>r.ok?r.json():(console.warn('Range failed:',ranges[i],r.status),{values:[]})));
+    return parseSD(jsons[0].values||[],jsons[1].values||[],jsons[2].values||[],jsons[3].values||[],jsons[4].values||[]);
+  }catch(e){console.error('Sheet fetch:',e);return null}
+}
+
+// ── parseSD — assembles the unified financial data object ──
+// Returns: {2026:{tgt,exp,sec,gap,pct,sur,iT,iA}, 2027:{...}, 2028:{tgt,sec,...},
+//           nm:[stream names], roles:[{role,target,current,gap,contributors}],
+//           grants:[{funder,totalFund,period,startYear,endYear,startDate,endDate,
+//                    cal2026,cal2027,cal2028}]}
+function parseSD(ov,ib,al26,al27,fund){
+  const out={nm:[],roles2026:[],roles2027:[],grants:[]};
+
+  // ── Income Budget tab (FY Income Budget 2026-2028_TYPE) ──
+  // Row 1 (index 0): headers ['', 'ACTUAL INCOME 2024', 'ACTUAL INCOME 2025',
+  //                            'INCOME ACTUAL AND EXPECTED 2026', 'BUDGET 2026',
+  //                            '% achieved', 'INCOME ACTUAL AND EXPECTED 2027',
+  //                            'BUDGET 2027', 'INCOME ACTUAL AND EXPECTED 2028', 'BUDGET 2028']
+  // Income stream rows: 2-12 (various — Individuals, Corporates, T&F, Statutory etc.)
+  // Row 15 (index 14): TOTAL — gives us tgt/sec/pct per year
+  // Find the TOTAL row by scanning col A.
+  let totalRow=-1;
+  for(let i=0;i<ib.length;i++){
+    const a=(ib[i]&&ib[i][0]||'').toString().trim().toUpperCase();
+    if(a==='TOTAL'){totalRow=i;break;}
+  }
+  // Income streams: gather rows with a label, capture all 4-digit codes (4010, 4020 etc).
+  // Names for the dashboard: trim leading code + spaces.
+  const streams=[];
+  for(let i=0;i<ib.length;i++){
+    if(i===totalRow)continue;
+    const raw=(ib[i]&&ib[i][0]||'').toString().trim();
+    if(!raw)continue;
+    // Match a 4-digit account code at start, OR known totals/category labels
+    if(/^\s*\d{4}\s/.test(raw)){
+      const clean=raw.replace(/^\s*\d{4}\s+/,'').trim();
+      streams.push({i,name:clean});
+    }else if(/Statutory/i.test(raw)&&!/TOTAL/i.test(raw)){
+      streams.push({i,name:'Statutory'});
+    }else if(/Other Income/i.test(raw)){
+      streams.push({i,name:'Other (Interest)'});
+    }
+  }
+  out.nm=streams.map(s=>s.name);
+
+  // Cols in income budget tab:
+  //   1=2024 actual, 2=2025 actual, 3=2026 actual/expected, 4=2026 BUDGET,
+  //   5=% achieved 2026, 6=2027 actual/expected, 7=2027 BUDGET,
+  //   8=2028 actual/expected, 9=2028 BUDGET
+  const iT26=streams.map(s=>gC(ib,s.i,4));
+  const iA26=streams.map(s=>gC(ib,s.i,3));
+  const iT27=streams.map(s=>gC(ib,s.i,7));
+  const iA27=streams.map(s=>gC(ib,s.i,6));
+  const iT28=streams.map(s=>gC(ib,s.i,9));
+  const iA28=streams.map(s=>gC(ib,s.i,8));
+
+  // Totals from TOTAL row
+  const tgt26=totalRow>=0?gC(ib,totalRow,4):iT26.reduce((a,b)=>a+b,0);
+  const sec26=totalRow>=0?gC(ib,totalRow,3):iA26.reduce((a,b)=>a+b,0);
+  const pct26=totalRow>=0?gC(ib,totalRow,5):(tgt26?sec26/tgt26:0);
+  const tgt27=totalRow>=0?gC(ib,totalRow,7):iT27.reduce((a,b)=>a+b,0);
+  const sec27=totalRow>=0?gC(ib,totalRow,6):iA27.reduce((a,b)=>a+b,0);
+  const tgt28=totalRow>=0?gC(ib,totalRow,9):iT28.reduce((a,b)=>a+b,0);
+  const sec28=totalRow>=0?gC(ib,totalRow,8):iA28.reduce((a,b)=>a+b,0);
+
+  // ── FY 2026 overview tab ──
+  // Row 2 (index 1): 'Total forecast expenditure for the year', col 1=2026, col 3=2027, col 5=2028
+  // Row 3 (index 2): 'Total reserves needed for the full year' (not displayed currently)
+  const exp26=Math.abs(gC(ov,1,1));
+  const exp27=Math.abs(gC(ov,1,3));
+  const exp28=Math.abs(gC(ov,1,5));
+
+  // Surplus / deficit = secured income − forecast expenditure
+  // (Cheryl's overview shows total NEEDED in bank including reserves; the simple
+  //  measure here is income vs operating expenditure for the year.)
+  const sur26=sec26-exp26;
+  const sur27=sec27-exp27;
+  const sur28=sec28-exp28;
+
+  const gap26=tgt26-sec26;
+  const gap27=tgt27-sec27;
+  const gap28=tgt28-sec28;
+
+  out[2026]={tgt:tgt26,exp:-exp26,sec:sec26,gap:gap26,pct:pct26,sur:sur26,iT:iT26,iA:iA26};
+  out[2027]={tgt:tgt27,exp:-exp27,sec:sec27,gap:gap27,pct:tgt27?sec27/tgt27:0,sur:sur27,iT:iT27,iA:iA27};
+  out[2028]={tgt:tgt28,exp:-exp28,sec:sec28,gap:gap28,pct:tgt28?sec28/tgt28:0,sur:sur28,iT:iT28,iA:iA28};
+
+  // ── Role allocation matrix (2026 FUNDER income allocation) ──
+  // Row 1 (index 0): ALLOCATION 2026 banner
+  // Row 2 (index 1): headers — col A=Funder, col B=Monthly, col C=Total 2026,
+  //                  col D=Unrestricted, col E onwards = role/cost categories
+  // Row 3 (index 2): BUDGET row (populated)
+  // Row 4 (index 3): UNCONFIRMED (AMOUNT REMAINING)
+  // Row 5 (index 4): % confirmed
+  // Row 6 (index 5): CONFIRMED TOTALS
+  // Row 7+ (index 6+): per-funder allocation rows
+  out.roles2026=parseRoleMatrix(al26);
+  out.roles2027=parseRoleMatrix(al27);
+
+  // ── Multi-year funder grants (ACTUAL FUNDING SOURCE 2026 - 2029 income overview) ──
+  // Row 2 (index 1): headers — col A=Funder, col B=Type, col C=Total Funding,
+  //                  col D=Funding period, col E=Start year, col F=Start month,
+  //                  col G=End month, col H=End year, col I=Year 1, col J=Year 2, col K=Year 3,
+  //                  col L=Calendar 2026, col M=Calendar 2027, col N=Calendar 2028, col O=Calendar 2029
+  // Row 3 (index 2): grand totals row (we skip — recomputed downstream)
+  // Row 4+ (index 3+): data rows
+  const serialToDate=(v)=>{
+    if(v===null||v===undefined||v==='')return null;
+    const n=parseFloat(v);
+    if(!isNaN(n)&&n>20000&&n<80000)return excelSerialToDate(n);
+    return null;
+  };
+  for(let i=3;i<fund.length;i++){
+    const r=fund[i];if(!r)continue;
+    const name=(r[0]||'').toString().trim();
+    if(!name)continue;
+    if(/^total/i.test(name))continue;
+    out.grants.push({
+      funder:name,
+      type:(r[1]||'').toString().trim(),
+      totalFund:parseNum(r[2]),
+      period:(r[3]||'').toString().trim(),
+      startYear:parseNum(r[4])||null,
+      startDate:serialToDate(r[5]),
+      endDate:serialToDate(r[6]),
+      endYear:parseNum(r[7])||null,
+      year1:parseNum(r[8]),
+      year2:parseNum(r[9]),
+      year3:parseNum(r[10]),
+      cal2026:parseNum(r[11]),
+      cal2027:parseNum(r[12]),
+      cal2028:parseNum(r[13]),
+      cal2029:parseNum(r[14])
+    });
+  }
+
+  return out;
+}
+
+// Helper: parse a "2026 FUNDER income allocation" style sheet → role rollup
+function parseRoleMatrix(rows){
+  if(!rows||rows.length<3)return [];
+  const headerRow=rows[1]||[];
+  // Role columns start at col D (index 3). Skip A=Funder, B=Monthly, C=Total.
+  const roles=[];
+  for(let c=3;c<headerRow.length;c++){
+    const name=(headerRow[c]||'').toString().trim();
+    if(name&&!/^total/i.test(name))roles.push({col:c,name});
+  }
+  const findRow=(label)=>{
+    for(let i=2;i<rows.length;i++){
+      const a=(rows[i]&&rows[i][0]||'').toString().trim().toUpperCase();
+      if(a.startsWith(label.toUpperCase()))return i;
+    }
+    return -1;
+  };
+  const budgetIdx=findRow('BUDGET');
+  const unconfirmedIdx=findRow('UNCONFIRMED');
+  const confirmedIdx=findRow('CONFIRMED');
+  const dataStartIdx=Math.max(budgetIdx,unconfirmedIdx,confirmedIdx,4)+1;
+  const funders=[];
+  for(let i=dataStartIdx;i<rows.length;i++){
+    const r=rows[i];if(!r)continue;
+    const name=(r[0]||'').toString().trim();
+    if(!name)continue;
+    if(/^(BUDGET|UNCONFIRMED|CONFIRMED|%)/i.test(name))continue;
+    const allocations={};
+    let hasAny=false;
+    roles.forEach(rl=>{
+      const v=parseNum(r[rl.col]);
+      if(v){allocations[rl.name]=v;hasAny=true;}
+    });
+    if(hasAny||parseNum(r[2])){
+      funders.push({funder:name,monthly:parseNum(r[1]),total:parseNum(r[2]),allocations});
+    }
+  }
+  return roles.map(rl=>{
+    const budget=budgetIdx>=0?parseNum(rows[budgetIdx]&&rows[budgetIdx][rl.col]):0;
+    const current=confirmedIdx>=0?parseNum(rows[confirmedIdx]&&rows[confirmedIdx][rl.col]):0;
+    const unconfirmed=unconfirmedIdx>=0?parseNum(rows[unconfirmedIdx]&&rows[unconfirmedIdx][rl.col]):0;
+    const contributors=funders.filter(f=>f.allocations[rl.name]).map(f=>({funder:f.funder,amount:f.allocations[rl.name]}));
+    return {
+      role:rl.name,
+      target:budget||null,
+      current,
+      unconfirmed:unconfirmed||null,
+      gap:budget?budget-current:null,
+      contributors
+    };
+  });
+}
+
+
+// Tabs read: 2026 Pipeline, SUBMISSIONS 21-26,
+//   Current Funders & Reporting dat, Annual comparisons,
+//   Compartive quarterly breakdowns, Overview 2026
+// ═══════════════════════════════════════════════════════════════
+async function fetchFundraisingSheet(){
+  S.fsLoading=true;S.fsError=null;
+  try{
+    const ranges=[
+      "'2026 Pipeline'!A1:I200",
+      "'SUBMISSIONS 21-26'!A1:N400",
+      "'Current Funders & Reporting dat'!A1:J100",
+      "'Annual comparisons'!A1:K25",
+      "'Compartive quarterly breakdowns'!A1:P80",
+      "'Overview 2026'!A1:K25"
+    ];
+    const urls=ranges.map(r=>`https://sheets.googleapis.com/v4/spreadsheets/${FID}/values/${encodeURIComponent(r)}?valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=SERIAL_NUMBER&key=${AK}`);
+    const res=await Promise.all(urls.map(u=>fetch(u)));
+    const failed=res.filter(r=>!r.ok);
+    if(failed.length===res.length)throw new Error('No tabs readable. Check sheet is shared: Anyone with the link can view.');
+    const jsons=await Promise.all(res.map(r=>r.ok?r.json():{values:[]}));
+    const fsd={
+      pipeline:parsePipeline2026(jsons[0].values||[]),
+      submissions:parseSubmissions(jsons[1].values||[]),
+      funders:parseCurrentFunders(jsons[2].values||[]),
+      annual:parseAnnual(jsons[3].values||[]),
+      quarterly:parseQuarterly(jsons[4].values||[]),
+      overview:parseOverview2026(jsons[5].values||[])
+    };
+    S.fsLoading=false;
+    return fsd;
+  }catch(e){
+    console.error('Fundraising sheet fetch:',e);
+    S.fsLoading=false;S.fsError=e.message;
+    return null;
+  }
+}
+
+// ── 2026 Pipeline tab ──
+// Cols: A=Prospect, B=Team Member, C=Type, D=Category, E=Restriction,
+//       F=Amount, G=Month, H=Notes, I=Status
+// Row 1: summary row (ignore). Row 2: headers. Row 3+: data.
+// Status normalisation: submitted/in progress/research/to discuss/rejected/(blank=prospect)
+function parsePipeline2026(rows){
+  const out=[];
+  for(let i=2;i<rows.length;i++){
+    const r=rows[i];if(!r)continue;
+    const funder=(r[0]||'').toString().trim();
+    if(!funder)continue;
+    const rawSt=(r[8]||'').toString().trim().toLowerCase();
+    let st='Prospect';
+    if(/submit/.test(rawSt))st='Applied for';
+    else if(/in progress/.test(rawSt))st='In Progress';
+    else if(/research/.test(rawSt))st='Research';
+    else if(/stuck|discuss/.test(rawSt))st='To Discuss';
+    else if(/reject/.test(rawSt))st='Unsuccessful';
+    // Skip rows where the Status cell contains long freeform notes (mis-entered)
+    if(rawSt.length>40)continue;
+    const ask=parseNum(r[5]);
+    out.push({
+      id:i,
+      f:funder,
+      tm:(r[1]||'').toString().trim()||'—',
+      is:(r[2]||'').toString().trim()||'T&F',
+      fo:(r[3]||'').toString().trim()||'Core',
+      restriction:(r[4]||'').toString().trim(),
+      v:ask,
+      month:(r[6]||'').toString().trim(),
+      notes:(r[7]||'').toString().trim(),
+      st,
+      yr:2026,
+      // Probability heuristic based on status
+      w:st==='Applied for'?.15:st==='In Progress'?.1:st==='Unsuccessful'?0:st==='Research'?.05:.03
+    });
+  }
+  return out;
+}
+
+// ── SUBMISSIONS 21-26 ──
+// Row 1: title. Row 2: headers. Row 3+: data.
+// Cols: A=chk, B=year marker (20-26 short year), C=Month, D=Date,
+//       E=Funder, F=Restriction, G=Ask, H=Multi-year boolean,
+//       I=Turnaround, J=Decision Month, K=Responsibility,
+//       L=Date of Response, M=Notes, N=Reapplication?
+function parseSubmissions(rows){
+  const out=[];
+  let currentYear=null;
+  for(let i=2;i<rows.length;i++){
+    const r=rows[i];if(!r)continue;
+    // Year marker: col B has a small number (20-26) and no funder in col E
+    const bVal=r[1];
+    if(bVal!==null&&bVal!==undefined&&bVal!==''&&bVal!==false){
+      const maybeYr=parseFloat(bVal);
+      if(!isNaN(maybeYr)&&maybeYr>=20&&maybeYr<=30&&!(r[4]||'').toString().trim()){
+        currentYear=2000+Math.round(maybeYr);continue;
+      }
+      // Also handles full year like 2026.0 in col B alongside a funder
+      if(!isNaN(maybeYr)&&maybeYr>=2020&&maybeYr<=2030){
+        currentYear=Math.round(maybeYr);
+        // Don't continue — row may also have funder data
+      }
+    }
+    const funder=(r[4]||'').toString().trim();
+    if(!funder)continue;
+    const ask=parseNum(r[6]);
+    const notes=(r[12]||'').toString().trim();
+    const owner=(r[10]||'').toString().trim();
+    const month=(r[2]||'').toString().trim();
+    // Date col D: with UNFORMATTED_VALUE, comes as Excel serial number for date cells
+    let submissionDate=null;
+    let yr=currentYear;
+    const dRaw=r[3];
+    if(dRaw!==null&&dRaw!==undefined&&dRaw!==''){
+      // Try as Excel serial first
+      const dNum=parseFloat(dRaw);
+      if(!isNaN(dNum)&&dNum>20000&&dNum<80000){
+        const d=excelSerialToDate(dNum);
+        if(d){submissionDate=d;yr=d.getFullYear();}
+      }else{
+        // Fallback for free-text dates
+        const d=new Date(dRaw);
+        if(!isNaN(d.getTime())&&String(dRaw).match(/\d{4}/)){submissionDate=d;yr=d.getFullYear();}
+      }
+    }
+    // Sniff outcome from notes
+    let outcome='Pending';
+    const nl=notes.toLowerCase();
+    if(/rejected|unsuccessful|declined|not successful/.test(nl))outcome='Rejected';
+    else if(/awarded|successful|offered|secured/.test(nl))outcome='Awarded';
+    else if(/withdrawn/.test(nl))outcome='Withdrawn';
+    const multiYear=(r[7]===true||r[7]==='TRUE'||r[7]==='true');
+    out.push({
+      funder,ask,owner,year:yr||null,month,
+      submissionDate,notes,outcome,multiYear,
+      restriction:(r[5]||'').toString().trim(),
+      decisionMonth:(r[9]||'').toString().trim()
+    });
+  }
+  return out;
+}
+
+// ── Current Funders & Reporting dat ──
+// Row 1: totals. Row 2: headers. Row 3+: data.
+// Cols: A=Funder, B=Type, C=Annual Amount, D=Total, E=Restriction,
+//       F=Start Date, G=End Date, H=Year (e.g. "2/3 years"),
+//       I=Report Due, J=Meetings
+function parseCurrentFunders(rows){
+  const out=[];let section='Carried over';
+  for(let i=1;i<rows.length;i++){
+    const r=rows[i];if(!r||!r[0])continue;
+    const name=(r[0]||'').toString().trim();
+    if(!name)continue;
+    // Skip header row
+    if(name.toLowerCase()==='funder')continue;
+    // Section headers: no type and no amount
+    if(!r[2]&&/^(Carried over|Successful in \d{4}|Ending in \d{4}|Pending)/i.test(name)){
+      section=name.replace(/\s+$/,'');continue;
+    }
+    // Also catch section headers that have no type
+    if(!r[1]&&!r[2]&&!r[3]){
+      if(/^(Carried|Successful|Ending|Pending)/i.test(name)){section=name;continue;}
+    }
+    const annual=parseNum(r[2]);
+    const total=parseNum(r[3]);
+    if(!annual&&!total)continue;
+    // Start/End dates: with UNFORMATTED_VALUE, come as Excel serials for date cells
+    let startDate=null,endDate=null;
+    const trySerialDate=(v)=>{
+      if(v===null||v===undefined||v==='')return null;
+      const n=parseFloat(v);
+      if(!isNaN(n)&&n>20000&&n<80000)return excelSerialToDate(n);
+      const d=new Date(v);
+      return !isNaN(d.getTime())&&String(v).match(/\d{4}/)?d:null;
+    };
+    startDate=trySerialDate(r[5]);
+    endDate=trySerialDate(r[6]);
+    const yearProg=parseYearProgress(r[7]);
+    const reportDue=parseReportDue(r[8]);
+    out.push({
+      funder:name,
+      type:(r[1]||'').toString().trim(),
+      annual,total,
+      restriction:(r[4]||'').toString().trim(),
+      startDate,endDate,
+      yearRaw:(r[7]||'').toString().trim(),
+      yearProgress:yearProg,
+      reportDueRaw:(r[8]||'').toString().trim(),
+      reportDue,
+      meetings:(r[9]||'').toString().trim(),
+      section
+    });
+  }
+  return out;
+}
+
+// ── Annual comparisons ──
+// Layout (row indices are 0-based from API response, so row 2 in sheet = index 1):
+// Row 2 (idx 1): section headers
+// Row 3 (idx 2): 2025 total submitted (col B=1), 2026 Zoe comparison (cols D-F=3-5), 2026 total submitted (col H=7)
+// Row 4 (idx 3): 2025 with Propel (col B), Kashvi (cols D-E), 2026 Zoe (col H=7)
+// Row 5 (idx 4): Zoe 2025 (col B), Big House SR header (col D), 2026 Kashvi (col H=7)
+// Row 6 (idx 5): Kashvi 2025 (col B)
+// Row 8 (idx 7): "2025 Successful" header, 2025 Zoe SR (col E=4), "2026 Successful" header (col H), first 2026 success (cols H,I=7,8)
+// Row 12 (idx 11): 2025 Big House SR (col F=5)
+// Row 14 (idx 13): Total 2026 secured (col I=8)
+// Row 21 (idx 20): 2025 total successful (col B=1)
+function parseAnnual(rows){
+  const g=(ri,ci)=>{
+    const row=rows[ri];
+    return row&&row[ci]!==undefined&&row[ci]!==null&&row[ci]!==''?row[ci]:'';
+  };
+  const out={
+    y2025:{
+      submitted:parseNum(g(2,1)),
+      submittedWithPropel:parseNum(g(3,1)),
+      zoeSubmitted:parseNum(g(4,1)),
+      kashviSubmitted:parseNum(g(5,1)),
+      zoeSuccessRate:parseNum(g(7,5)),
+      kashviSuccessRate:parseNum(g(8,5)),
+      bigHouseSuccessRate:parseNum(g(11,5)),
+      totalSuccessful:parseNum(g(20,1))
+    },
+    y2024:{
+      submitted:parseNum(g(14,5)),
+      successExclPropel:parseNum(g(15,5)),
+      successWithPropel:parseNum(g(16,5)),
+      rateWithPropel:parseNum(g(18,5)),
+      rateExclPropel:parseNum(g(19,5))
+    },
+    y2026:{
+      submittedTotal:parseNum(g(2,8)),
+      zoeSubmitted:parseNum(g(3,8)),
+      kashviSubmitted:parseNum(g(4,8)),
+      successful:[]
+    }
+  };
+  // 2026 successful list: rows 7+ where col H (7) has a name and col I (8) has a number
+  for(let i=7;i<rows.length&&i<22;i++){
+    const nm=(g(i,7)||'').toString().trim();
+    const amt=parseNum(g(i,8));
+    if(nm&&amt&&!/^(Total|2026|Big House|Submitted|Success)/i.test(nm)){
+      out.y2026.successful.push({funder:nm,amount:amt});
+    }
+  }
+  const yTotal=out.y2026.successful.reduce((a,b)=>a+b.amount,0);
+  out.y2026.totalSuccessful=yTotal;
+  if(out.y2026.submittedTotal>0)out.y2026.successRate=yTotal/out.y2026.submittedTotal;
+  return out;
+}
+
+// ── Comparative quarterly breakdowns ──
+// Row 1: blank. Row 2: Quarter labels at cols B,F,J,N (1,5,9,13).
+// Row 3: Year labels 2024/2025/2026 at cols B-D, F-H, J-L, N-P.
+// Row 4: Total Submitted at same columns.
+// Row 6+: application lists.
+function parseQuarterly(rows){
+  const g=(ri,ci)=>rows[ri]&&rows[ri][ci]!==undefined?rows[ri][ci]:'';
+  const quarters=['Q1','Q2','Q3','Q4'];
+  const years=[2024,2025,2026];
+  const out={quarters:[]};
+  const colOffsets=[1,5,9,13]; // 0-indexed col positions for each quarter's 2024 column
+  quarters.forEach((q,qi)=>{
+    const row={quarter:q,values:{}};
+    years.forEach((y,yi)=>{
+      row.values[y]=parseNum(g(3,colOffsets[qi]+yi));
+    });
+    out.quarters.push(row);
+  });
+  out.applications={};
+  years.forEach(y=>out.applications[y]={Q1:[],Q2:[],Q3:[],Q4:[]});
+  for(let i=5;i<rows.length;i++){
+    quarters.forEach((q,qi)=>{
+      years.forEach((y,yi)=>{
+        const v=(g(i,colOffsets[qi]+yi)||'').toString().trim();
+        if(v)out.applications[y][q].push(v);
+      });
+    });
+  }
+  return out;
+}
+
+// ── Overview 2026 tab ──
+// Cols E-G (4-6): 2026 confirmed funders. Row 2 col G: total confirmed.
+// Cols I-K (8-10): 2026 pending. Row 2 col J: total pending. Row 2 col K: expected by success rate.
+// Col A-C: funds ending 2025.
+function parseOverview2026(rows){
+  const g=(ri,ci)=>rows[ri]&&rows[ri][ci]!==undefined&&rows[ri][ci]!==null?rows[ri][ci]:'';
+  const out={
+    confirmed:{total:parseNum(g(1,6)),funders:[]},
+    pending:{total:parseNum(g(1,9)),expected:parseNum(g(1,10)),funders:[]},
+    ending2025:{funders:[]}
+  };
+  // Confirmed funders: col E (4) = name, col F (5) = amount
+  for(let i=2;i<rows.length;i++){
+    const nm=(g(i,4)||'').toString().trim();
+    const amt=parseNum(g(i,5));
+    if(nm&&amt&&!/^(Total|Funds ending)/i.test(nm))out.confirmed.funders.push({funder:nm,amount:amt});
+  }
+  // Pending funders: col I (8) = name, col J (9) = amount, col K (10) = duration
+  for(let i=2;i<rows.length;i++){
+    const nm=(g(i,8)||'').toString().trim();
+    const amt=parseNum(g(i,9));
+    const dur=(g(i,10)||'').toString().trim();
+    if(nm&&amt&&!/^(Total|Expected|EOF)/i.test(nm))out.pending.funders.push({funder:nm,amount:amt,duration:dur});
+  }
+  // Ending 2025: col A (0) = name, col B (1) = amount
+  for(let i=2;i<rows.length;i++){
+    const nm=(g(i,0)||'').toString().trim();
+    const amt=parseNum(g(i,1));
+    if(nm&&amt&&!/^(Funds ending|Total)/i.test(nm))out.ending2025.funders.push({funder:nm,amount:amt});
+  }
+  return out;
+}
+
+// Pipeline is now loaded as part of fetchFundraisingSheet() via parsePipeline2026().
+// PIPE is populated in init() once fsd is available.
+// Write-back is not implemented (read-only API key).
+function writePipeline(){S.pipelineDirty=true;}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════
+let CI=null;
+function R(){
+  const a=document.getElementById('app');const d=S.sd;const y=d?d[S.yr]:null;
+  const showRoles=S.yr!=='2028';
+  let h='';
+
+  // Header
+  h+=`<div class="hdr"><div><div class="hdr-t"><span>TBH</span> FUNDING INTELLIGENCE</div><div class="hdr-s">The Big House · Live Data from Google Sheets</div></div><div class="hdr-r"><button class="scan" onclick="reloadFundraising()" ${S.fsLoading?'disabled style="opacity:.5"':''}>${S.fsLoading?'LOADING...':'REFRESH'}</button></div></div>`;
+
+  // Nav
+  const upcomingCount=S.fsd?S.fsd.funders.filter(f=>f.reportDue&&f.reportDue.date&&daysUntil(f.reportDue.date)!==null&&daysUntil(f.reportDue.date)<=60&&daysUntil(f.reportDue.date)>=-30).length:0;
+  const tabs=[
+    {k:'overview',l:'OVERVIEW'},
+    {k:'pipeline',l:'PIPELINE'},
+    {k:'successrates',l:'SUCCESS RATES'},
+    {k:'quarterly',l:'QUARTERLY'},
+    {k:'multiyear',l:'MULTI-YEAR'},
+    {k:'rolefunding',l:'ROLE FUNDING'},
+    {k:'reporting',l:'REPORTING',b:upcomingCount||null}
+  ];
+  h+='<div class="nav">';tabs.forEach(t=>{h+=`<button class="nav-b ${S.tab===t.k?'on':''}" onclick="S.tab='${t.k}';R()">${t.l}${t.b?`<span class="badge">${t.b}</span>`:''}</button>`});h+='</div>';
+
+  // Year tabs
+  if(S.tab==='overview'){h+='<div class="yr-tabs">';['2026','2027','2028'].forEach(v=>{h+=`<button class="yr-b ${S.yr===v?'on':''}" onclick="S.yr='${v}';R()">${v}</button>`});h+='</div>'}
+
+  // ── OVERVIEW ──
+  if(S.tab==='overview'){
+    if(!d)h+='<div class="ld"><div class="sp"></div>Connecting to Google Sheets...</div>';
+    else{
+      h+=`<div class="sec-t">FINANCIAL OVERVIEW</div><div class="mrow">`;
+      h+=mc('INCOME TARGET',y?.tgt,'#fff')+mc('FORECAST EXPENDITURE',Math.abs(y?.exp||0),'#fff')+mc('PLANNED SURPLUS / DEFICIT',y?.sur,vc(y?.sur||0));
+      h+='</div><div class="sec-t">SECURED INCOME AGAINST TARGET</div><div class="mrow">';
+      h+=mc('SECURED INCOME',y?.sec,'#fff');
+      const pv=y?.pct;h+=`<div class="mc"><div class="mc-l">TARGET REACHED</div><div class="mc-v">${pv?(typeof pv==='number'&&pv<1?(pv*100).toFixed(0)+'%':Math.round(pv)+'%'):'—'}</div></div>`;
+      h+=mc('FUNDING GAP',y?.gap,vc(y?.gap||0));
+      h+='</div>';
+      if(S.yr!=='2028'){
+        h+='<div class="sec-t">PIPELINE ANALYSIS</div><div class="mrow">';
+        // Weighted pipeline from 2026 Pipeline tab (fundraising workbook)
+        const wpLive=PIPE.length?PIPE.reduce((a,p)=>a+((p.v||0)*(p.w||0)),0):null;
+        h+=mc('WEIGHTED PIPELINE',wpLive,'#fff');
+        const cg=wpLive!=null&&y?.gap!=null?(wpLive+y.gap>=0):null;
+        h+=`<div class="mc"><div class="mc-l">PIPELINE COVERS GAP</div><div class="mc-v" style="color:${cg?'var(--gn)':'var(--rd)'}">${cg===null?'—':cg?'YES':'NO'}</div></div>`;
+        h+=mc('PENDING APPLICATIONS',S.fsd?.overview?.pending?.total??null,'var(--yl)');
+        h+='</div>';
+      }
+      // Gap bars
+      h+='<div style="background:var(--cd);border:1px solid var(--bd);border-radius:4px;padding:14px;margin:14px 0"><div class="sec-t" style="margin-bottom:10px">FUNDING GAP TRACKER</div>';
+      if(d[2026]){
+        const wp26=PIPE.length?PIPE.reduce((a,p)=>a+((p.v||0)*(p.w||0)),0):0;
+        h+=gapB('2026',d[2026].sec,d[2026].tgt,wp26);
+      }
+      if(d[2027])h+=gapB('2027',d[2027].sec,d[2027].tgt,0);
+      h+='</div>';
+      // Chart
+      if(y?.iT)h+=`<div class="cc"><div class="sec-t">INCOME STREAMS: TARGET VS ACTUAL (${S.yr})</div><div style="position:relative;height:300px"><canvas id="ic"></canvas></div></div>`;
+      // Role gap table — from the matching FUNDER income allocation tab
+      const rolesForYear=S.yr==='2026'?d.roles2026:S.yr==='2027'?d.roles2027:null;
+      if(rolesForYear&&rolesForYear.length>0&&showRoles){
+        const withGap=rolesForYear.filter(r=>(r.target||r.current)&&!/^unrestricted/i.test(r.role));
+        if(withGap.length){
+          h+='<div class="cc"><div class="sec-t">INCOME GAP BY ROLE ('+S.yr+')</div><div class="tw"><table style="min-width:400px"><thead><tr><th>ROLE</th><th style="text-align:right">TARGET</th><th style="text-align:right">RAISED</th><th style="text-align:right">GAP</th></tr></thead><tbody>';
+          withGap.forEach(r=>{
+            const gap=r.target?r.target-r.current:null;
+            h+=`<tr><td style="font-weight:600">${r.role}</td><td class="bb" style="font-size:13px;text-align:right">${r.target?fm(r.target):'—'}</td><td class="bb" style="font-size:13px;text-align:right;color:var(--gn)">${fm(r.current)}</td><td class="bb" style="font-size:13px;text-align:right;color:${gap==null?'var(--mt)':gap>0?'var(--rd)':'var(--gn)'}">${gap!=null?fs(-gap):'—'}</td></tr>`;
+          });
+          h+='</tbody></table></div></div>';
+        }
+      }
+    }
+  }
+
+  // ── PIPELINE ──
+  if(S.tab==='pipeline'){
+    const pipeStatuses=['all','Applied for','In Progress','Research','To Discuss','Unsuccessful','Prospect'];
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px"><div class="flt" style="margin-bottom:0">';
+    pipeStatuses.forEach(s=>{h+=`<button class="fb ${S.sF===s?'on':''}" onclick="S.sF='${s}';R()">${s==='all'?'All':s}</button>`});
+    h+='<div class="fsep"></div>';
+    ['all','KM','ZM'].forEach(t=>{h+=`<button class="fb ${S.tF===t?'on':''}" onclick="S.tF='${t}';R()">${t==='all'?'All team':t}</button>`});
+    h+=`</div><button class="dbtn" style="font-size:10px" onclick="exportCSV()">EXPORT CSV</button></div>`;
+    if(S.pipelineDirty)h+='<div style="font-size:10px;color:var(--yl);margin-bottom:8px">Local changes not yet synced to sheet</div>';
+    if(!S.fsd){h+='<div style="text-align:center;padding:40px;color:var(--mt)">Loading pipeline...<br><button class="scan" style="margin-top:12px" onclick="reloadFundraising()">RETRY</button></div>';}
+    else if(PIPE.length===0){h+='<div style="text-align:center;padding:40px;color:var(--mt)">No pipeline data found in the 2026 Pipeline tab.</div>';}
+    else{
+      const SBC2={'Applied for':'sb-app','In Progress':'sb-pro','Research':'sb-eoi','To Discuss':'sb-uns','Unsuccessful':'sb-uns','Prospect':'sb-pro'};
+      let fl=PIPE.filter(p=>{
+        if(S.sF!=='all'&&p.st!==S.sF)return false;
+        if(S.tF!=='all'&&p.tm!==S.tF)return false;
+        return true;
+      }).sort((a,b)=>(b.v||0)-(a.v||0));
+      h+='<div class="tw"><table><thead><tr>';
+      ['FUNDER','OWNER','TYPE','CATEGORY','STATUS','ASK','MONTH'].forEach(x=>{h+=`<th>${x}</th>`});
+      h+='</tr></thead><tbody>';
+      fl.forEach(p=>{
+        const sc=SBC2[p.st]||'sb-pro';
+        h+=`<tr><td style="font-weight:600;color:#fff;max-width:220px;white-space:normal">${p.f}</td><td style="color:var(--sc)">${p.tm||'—'}</td><td style="color:var(--sc)">${p.is||'—'}</td><td style="color:var(--sc)">${p.fo||'—'}</td><td><span class="sb ${sc}"><span class="dt"></span>${p.st}</span></td><td class="bb" style="font-size:14px">${p.v?fm(p.v):'—'}</td><td style="color:var(--sc)">${p.month||'—'}</td></tr>`;
+      });
+      const totalAsk=fl.reduce((a,p)=>a+(p.v||0),0);
+      h+=`</tbody></table><div class="tf"><span style="color:var(--mt)">${fl.length} prospects</span><span style="color:var(--tl);font-weight:700">Total ask: ${fm(totalAsk)}</span></div></div>`;
+    }
+  }
+
+  // ── SUCCESS RATES ──
+  if(S.tab==='successrates'){
+    if(S.fsLoading){h+='<div class="ld"><div class="sp"></div>Loading success rate data...</div>';}
+    else if(!S.fsd){h+='<div style="text-align:center;padding:40px;color:var(--mt)">Could not load Fundraising Overview 2026 sheet. '+(S.fsError||'Check sharing settings.')+'<br><button class="scan" style="margin-top:12px" onclick="reloadFundraising()">RETRY</button></div>';}
+    else{
+      const a=S.fsd.annual;
+      // ── ROLLING 12 MONTHS — computed from SUBMISSIONS 21-26 dates ──
+      const today=new Date();
+      const yearAgo=new Date(today.getTime()-365*24*60*60*1000);
+      const subs=S.fsd.submissions||[];
+      const rolling=subs.filter(s=>s.submissionDate&&s.submissionDate>=yearAgo&&s.submissionDate<=today);
+      const rollSubmitted=rolling.reduce((a,b)=>a+(b.ask||0),0);
+      const rollAwarded=rolling.filter(s=>s.outcome==='Awarded').reduce((a,b)=>a+(b.ask||0),0);
+      const rollAwardedCount=rolling.filter(s=>s.outcome==='Awarded').length;
+      const rollRate=rollSubmitted>0?rollAwarded/rollSubmitted:null;
+      h+='<div class="sec-t">ROLLING 12 MONTHS</div>';
+      h+=`<div style="font-size:11px;color:var(--mt);margin-bottom:8px">${rolling.length} applications submitted in the last 365 days · ${rollAwardedCount} awarded · outcome detected from Notes column</div>`;
+      h+='<div class="mrow">';
+      h+=mc('TOTAL SUBMITTED',rollSubmitted,'#fff');
+      h+=mc('TOTAL SECURED',rollAwarded,'var(--gn)');
+      h+=`<div class="mc"><div class="mc-l">SUCCESS RATE</div><div class="mc-v" style="color:${rollRate>=.15?'var(--gn)':rollRate>=.1?'var(--yl)':rollRate==null?'var(--mt)':'var(--rd)'}">${rollRate!=null?(rollRate*100).toFixed(1)+'%':'—'}</div></div>`;
+      h+='</div>';
+      // 2025 comparison
+      h+='<div class="sec-t" style="margin-top:14px">2025 (FULL YEAR)</div><div class="mrow">';
+      h+=mc('SUBMITTED (EXCL PROPEL)',a.y2025.submitted,'#fff');
+      h+=mc('SECURED',a.y2025.totalSuccessful,'var(--gn)');
+      const sr25=a.y2025.bigHouseSuccessRate;
+      h+=`<div class="mc"><div class="mc-l">SUCCESS RATE</div><div class="mc-v" style="color:${sr25>=.15?'var(--gn)':sr25>=.1?'var(--yl)':'var(--rd)'}">${sr25?(sr25*100).toFixed(1)+'%':'—'}</div></div>`;
+      h+='</div>';
+      if(a.y2025.zoeSuccessRate||a.y2025.kashviSuccessRate){
+        h+='<div class="mrow">';
+        h+=`<div class="mc"><div class="mc-l">ZOE SUCCESS RATE</div><div class="mc-v">${a.y2025.zoeSuccessRate?(a.y2025.zoeSuccessRate*100).toFixed(1)+'%':'—'}</div></div>`;
+        h+=`<div class="mc"><div class="mc-l">KASHVI SUCCESS RATE</div><div class="mc-v">${a.y2025.kashviSuccessRate?(a.y2025.kashviSuccessRate*100).toFixed(1)+'%':'—'}</div></div>`;
+        h+='</div>';
+      }
+      // 2024 comparison
+      h+='<div class="sec-t" style="margin-top:14px">2024 (FULL YEAR)</div><div class="mrow">';
+      h+=mc('SUBMITTED',a.y2024.submitted,'#fff');
+      h+=mc('SECURED',a.y2024.successExclPropel,'var(--gn)');
+      const sr24=a.y2024.rateExclPropel;
+      h+=`<div class="mc"><div class="mc-l">SUCCESS RATE (EXCL PROPEL)</div><div class="mc-v" style="color:${sr24>=.15?'var(--gn)':sr24>=.1?'var(--yl)':'var(--rd)'}">${sr24?(sr24*100).toFixed(1)+'%':'—'}</div></div>`;
+      h+='</div>';
+      // Rolling 12-month awarded list
+      if(rollAwardedCount>0){
+        h+='<div class="cc" style="margin-top:14px"><div class="sec-t">SECURED IN LAST 12 MONTHS</div><div class="tw"><table style="min-width:400px"><thead><tr><th>FUNDER</th><th>SUBMITTED</th><th style="text-align:right">AMOUNT</th></tr></thead><tbody>';
+        rolling.filter(s=>s.outcome==='Awarded').sort((a,b)=>b.submissionDate-a.submissionDate).forEach(s=>{
+          const ds=s.submissionDate.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+          h+=`<tr><td style="font-weight:600">${s.funder}</td><td style="color:var(--sc);font-size:11px">${ds}</td><td class="bb" style="font-size:14px;text-align:right;color:var(--gn)">${fm(s.ask)}</td></tr>`;
+        });
+        h+=`<tr style="border-top:2px solid var(--bd)"><td style="font-weight:700">Total</td><td></td><td class="bb" style="font-size:14px;text-align:right;color:var(--gn)">${fm(rollAwarded)}</td></tr>`;
+        h+='</tbody></table></div></div>';
+      }
+      h+='<div style="font-size:10px;color:var(--mt);margin-top:14px;padding:10px;background:#0d0d0d;border-radius:4px">Rolling 12 months reads submission dates from SUBMISSIONS 21-26 tab. Awarded status is detected by keyword in Notes column — for fully reliable rates, add a dedicated Outcome column.</div>';
+    }
+  }
+
+  // ── QUARTERLY OUTPUT ──
+  if(S.tab==='quarterly'){
+    if(S.fsLoading){h+='<div class="ld"><div class="sp"></div>Loading quarterly data...</div>';}
+    else if(!S.fsd){h+='<div style="text-align:center;padding:40px;color:var(--mt)">Could not load Fundraising Overview 2026 sheet.<br><button class="scan" style="margin-top:12px" onclick="reloadFundraising()">RETRY</button></div>';}
+    else{
+      const q=S.fsd.quarterly;
+      // Year totals
+      let t24=0,t25=0,t26=0;
+      q.quarters.forEach(row=>{
+        t24+=row.values[2024]||0;t25+=row.values[2025]||0;t26+=row.values[2026]||0;
+      });
+      // Year totals row
+      h+='<div class="sec-t">YEAR TOTALS SUBMITTED</div><div class="mrow">';
+      h+=mc('2024',t24,'#fff');
+      h+=mc('2025',t25,'#fff');
+      h+=mc('2026 YTD',t26,'var(--tl)');
+      h+='</div>';
+      // Per-quarter rows of metric cards
+      q.quarters.forEach(row=>{
+        const v24=row.values[2024]||0,v25=row.values[2025]||0,v26=row.values[2026]||0;
+        const labels={Q1:'Q1 (Jan – Mar)',Q2:'Q2 (Apr – Jun)',Q3:'Q3 (Jul – Sep)',Q4:'Q4 (Oct – Dec)'};
+        h+=`<div class="sec-t" style="margin-top:14px">${labels[row.quarter]||row.quarter}</div><div class="mrow">`;
+        h+=mc('2024',v24,'#fff');
+        h+=mc('2025',v25,'#fff');
+        h+=mc('2026',v26,v26?'var(--tl)':'var(--mt)');
+        h+='</div>';
+      });
+      // Applications per quarter (2026 focus)
+      if(q.applications&&q.applications[2026]){
+        const has2026=['Q1','Q2','Q3','Q4'].some(qk=>(q.applications[2026][qk]||[]).length>0);
+        if(has2026){
+          h+='<div class="cc" style="margin-top:14px"><div class="sec-t">2026 APPLICATIONS BY QUARTER</div>';
+          ['Q1','Q2','Q3','Q4'].forEach(qk=>{
+            const apps=q.applications[2026][qk]||[];
+            if(apps.length===0)return;
+            h+=`<div style="margin-bottom:14px"><div style="font-size:14px;color:var(--pk);font-weight:700;letter-spacing:1px;margin-bottom:8px">${qk} · ${apps.length} APPLICATION${apps.length===1?'':'S'}</div><div style="display:flex;flex-wrap:wrap;gap:6px">`;
+            apps.forEach(a=>{h+=`<span style="font-size:13px;padding:4px 10px;background:#1a1a1a;color:#fff;border-radius:3px">${a}</span>`});
+            h+='</div></div>';
+          });
+          h+='</div>';
+        }
+      }
+    }
+  }
+
+  // ── MULTI-YEAR GRANTS ──
+  if(S.tab==='multiyear'){
+    if(!d){h+='<div class="ld"><div class="sp"></div>Loading funder data...</div>';}
+    else{
+      const today=new Date();
+      const all=d.grants||[];
+      // Multi-year detection: payments in 2+ calendar years OR period >12 months
+      const calCount=g=>[g.cal2026,g.cal2027,g.cal2028,g.cal2029].filter(v=>v>0).length;
+      const isMultiYear=g=>{
+        if(calCount(g)>=2)return true;
+        const m=g.period&&g.period.match(/(\d+)\s*months/i);
+        return m&&parseInt(m[1])>12;
+      };
+      const multiYear=all.filter(isMultiYear);
+      const singleYear=all.filter(g=>!isMultiYear(g)&&(g.cal2026||g.cal2027||g.cal2028||g.cal2029||g.totalFund));
+      // Pending multi-year from Overview 2026 tab (fundraising workbook)
+      const pendingMY=S.fsd&&S.fsd.overview?S.fsd.overview.pending.funders.filter(f=>{
+        const dur=(f.duration||'').toLowerCase();
+        return /years|months/.test(dur)&&!/12\s*months|1\s*year/.test(dur);
+      }):[];
+      const pendingMYTotal=pendingMY.reduce((a,b)=>a+b.amount,0);
+      // Totals across ALL grants on the tab (matches Cheryl's row 3 grand totals)
+      const cal2026Total=all.reduce((a,b)=>a+b.cal2026,0);
+      const cal2027Total=all.reduce((a,b)=>a+b.cal2027,0);
+      const cal2028Total=all.reduce((a,b)=>a+b.cal2028,0);
+      const cal2029Total=all.reduce((a,b)=>a+b.cal2029,0);
+      h+='<div class="mrow">';
+      h+=mc('MULTI-YEAR GRANTS',multiYear.length||null,'#fff');
+      h+=mc('2026 INCOME',cal2026Total,'var(--gn)');
+      h+=mc('2027 INCOME',cal2027Total,'var(--tl)');
+      h+=mc('2028 INCOME',cal2028Total||null,cal2028Total?'var(--tl)':'var(--mt)');
+      h+='</div>';
+      // Confirmed multi-year table
+      if(multiYear.length){
+        h+='<div class="sec-t" style="margin-top:14px">MULTI-YEAR GRANTS — CALENDAR APPORTIONMENT</div>';
+        h+=`<div style="font-size:11px;color:var(--mt);margin-bottom:8px">From ACTUAL FUNDING SOURCE 2026 - 2029 income overview tab in Cheryl's master sheet</div>`;
+        h+='<div class="tw"><table style="min-width:760px"><thead><tr><th>FUNDER</th><th>TYPE</th><th>PERIOD</th><th style="text-align:right">2026</th><th style="text-align:right">2027</th><th style="text-align:right">2028</th><th style="text-align:right">2029</th><th style="text-align:right">TOTAL</th></tr></thead><tbody>';
+        const myCal26=multiYear.reduce((a,b)=>a+b.cal2026,0);
+        const myCal27=multiYear.reduce((a,b)=>a+b.cal2027,0);
+        const myCal28=multiYear.reduce((a,b)=>a+b.cal2028,0);
+        const myCal29=multiYear.reduce((a,b)=>a+b.cal2029,0);
+        const myTotal=multiYear.reduce((a,b)=>a+(b.totalFund||0),0);
+        multiYear.sort((a,b)=>(b.cal2026+b.cal2027+b.cal2028+b.cal2029)-(a.cal2026+a.cal2027+a.cal2028+a.cal2029)).forEach(g=>{
+          const startLabel=g.startDate?g.startDate.toLocaleDateString('en-GB',{month:'short',year:'numeric'}):(g.startYear||'—');
+          const endLabel=g.endDate?g.endDate.toLocaleDateString('en-GB',{month:'short',year:'numeric'}):(g.endYear||'—');
+          const periodLabel=g.startDate||g.endDate?`${startLabel} → ${endLabel}`:(g.period||'—');
+          h+=`<tr><td style="font-weight:600;max-width:220px;white-space:normal">${g.funder}</td><td style="color:var(--sc);font-size:11px">${g.type||'—'}</td><td style="color:var(--sc);font-size:11px">${periodLabel}</td><td class="bb" style="font-size:13px;text-align:right;color:${g.cal2026?'var(--gn)':'var(--mt)'}">${g.cal2026?fm(g.cal2026):'—'}</td><td class="bb" style="font-size:13px;text-align:right;color:${g.cal2027?'var(--tl)':'var(--mt)'}">${g.cal2027?fm(g.cal2027):'—'}</td><td class="bb" style="font-size:13px;text-align:right;color:${g.cal2028?'var(--tl)':'var(--mt)'}">${g.cal2028?fm(g.cal2028):'—'}</td><td class="bb" style="font-size:13px;text-align:right;color:${g.cal2029?'var(--tl)':'var(--mt)'}">${g.cal2029?fm(g.cal2029):'—'}</td><td class="bb" style="font-size:13px;text-align:right">${g.totalFund?fm(g.totalFund):'—'}</td></tr>`;
+        });
+        h+=`<tr style="border-top:2px solid var(--bd);font-weight:700"><td>SUBTOTAL</td><td></td><td></td><td class="bb" style="font-size:13px;text-align:right;color:var(--gn)">${fm(myCal26)}</td><td class="bb" style="font-size:13px;text-align:right;color:var(--tl)">${fm(myCal27)}</td><td class="bb" style="font-size:13px;text-align:right;color:var(--tl)">${fm(myCal28)}</td><td class="bb" style="font-size:13px;text-align:right;color:var(--tl)">${fm(myCal29)}</td><td class="bb" style="font-size:13px;text-align:right">${fm(myTotal)}</td></tr>`;
+        h+='</tbody></table></div>';
+      }
+      // Single-year grants
+      if(singleYear.length){
+        h+=`<div class="sec-t" style="margin-top:18px">SINGLE-YEAR INCOME (2026 only)</div>`;
+        h+='<div class="tw"><table style="min-width:520px"><thead><tr><th>FUNDER</th><th>TYPE</th><th>PERIOD</th><th style="text-align:right">2026</th><th style="text-align:right">TOTAL</th></tr></thead><tbody>';
+        singleYear.sort((a,b)=>b.cal2026-a.cal2026).forEach(g=>{
+          h+=`<tr><td style="font-weight:600;max-width:220px;white-space:normal">${g.funder}</td><td style="color:var(--sc);font-size:11px">${g.type||'—'}</td><td style="color:var(--sc);font-size:11px">${g.period||'—'}</td><td class="bb" style="font-size:13px;text-align:right;color:${g.cal2026?'var(--gn)':'var(--mt)'}">${g.cal2026?fm(g.cal2026):'—'}</td><td class="bb" style="font-size:13px;text-align:right">${g.totalFund?fm(g.totalFund):'—'}</td></tr>`;
+        });
+        h+='</tbody></table></div>';
+      }
+      // Pending multi-year
+      if(pendingMY.length){
+        h+='<div class="sec-t" style="margin-top:18px">PENDING MULTI-YEAR APPLICATIONS</div>';
+        h+=`<div style="font-size:11px;color:var(--mt);margin-bottom:8px">From Overview 2026 tab in fundraising workbook · ${fm(pendingMYTotal)} total potential</div>`;
+        h+='<div class="tw"><table style="min-width:500px"><thead><tr><th>FUNDER</th><th>DURATION</th><th style="text-align:right">AMOUNT</th></tr></thead><tbody>';
+        pendingMY.sort((a,b)=>b.amount-a.amount).forEach(p=>{
+          h+=`<tr><td style="font-weight:600">${p.funder}</td><td style="color:var(--sc);font-size:11px">${p.duration||'—'}</td><td class="bb" style="font-size:13px;text-align:right;color:var(--yl)">${fm(p.amount)}</td></tr>`;
+        });
+        h+='</tbody></table></div>';
+      }
+      if(multiYear.length===0&&singleYear.length===0&&pendingMY.length===0){
+        h+='<div style="text-align:center;padding:40px;color:var(--mt)">No funder grants found on ACTUAL FUNDING SOURCE 2026 - 2029 income overview tab.</div>';
+      }
+    }
+  }
+
+  // ── ROLE FUNDING ──
+  if(S.tab==='rolefunding'){
+    if(!d){h+='<div class="ld"><div class="sp"></div>Loading allocation data...</div>';}
+    else{
+      // Year selector (2026 / 2027)
+      h+='<div class="yr-tabs">';['2026','2027'].forEach(v=>{h+=`<button class="yr-b ${S.yr===v?'on':''}" onclick="S.yr='${v}';R()">${v}</button>`});h+='</div>';
+      const allRoles=S.yr==='2027'?(d.roles2027||[]):(d.roles2026||[]);
+      // Split Unrestricted out — it's available-to-allocate income, not a cost line
+      const isUnrestricted=r=>/^unrestricted/i.test(r.role);
+      const costRoles=allRoles.filter(r=>!isUnrestricted(r)&&(r.current||r.target||r.contributors.length));
+      const unrestricted=allRoles.find(isUnrestricted);
+      if(costRoles.length===0&&!unrestricted){
+        h+=`<div style="text-align:center;padding:40px;color:var(--mt)">No allocation data found on ${S.yr} FUNDER income allocation tab.</div>`;
+      }else{
+        const totalTarget=costRoles.reduce((a,b)=>a+(b.target||0),0);
+        const totalCurrent=costRoles.reduce((a,b)=>a+b.current,0);
+        const totalGap=totalTarget?totalTarget-totalCurrent:0;
+        h+='<div class="mrow">';
+        h+=mc(S.yr+' TARGET',totalTarget||null,totalTarget?'#fff':'var(--mt)');
+        h+=mc('CURRENT RAISE',totalCurrent,'var(--gn)');
+        h+=mc('GAP',totalGap||null,totalGap>0?'var(--rd)':'var(--gn)');
+        h+='</div>';
+        if(!totalTarget){
+          h+=`<div style="font-size:11px;color:var(--yl);margin:8px 0 14px;padding:8px 12px;background:#1a1410;border-left:3px solid var(--yl)">Targets pending: BUDGET row on ${S.yr} FUNDER income allocation tab not yet populated. Current raise figures shown.</div>`;
+        }
+        // Unrestricted callout — shown above cost roles, informational only
+        if(unrestricted&&unrestricted.current){
+          h+=`<div class="cc" style="margin-top:14px;border-left:3px solid var(--tl)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px"><div><div style="font-size:13px;font-weight:700">Unrestricted income</div><div style="font-size:10px;color:var(--mt);margin-top:2px">Available to allocate across any cost line · no fixed target</div></div><div style="font-size:10px;color:var(--mt)">AVAILABLE <span style="color:var(--tl);font-weight:700;font-size:16px">${fm(unrestricted.current)}</span></div></div>`;
+          if(unrestricted.contributors&&unrestricted.contributors.length){
+            h+='<div style="display:flex;flex-wrap:wrap;gap:4px">';
+            unrestricted.contributors.sort((a,b)=>b.amount-a.amount).forEach(c=>{
+              h+=`<span class="ot" style="font-size:11px">${c.funder} · ${fm(c.amount)}</span>`;
+            });
+            h+='</div>';
+          }
+          h+='</div>';
+        }
+        // Cost roles — target/raised/gap
+        costRoles.sort((a,b)=>{
+          if(a.target&&!b.target)return -1;
+          if(!a.target&&b.target)return 1;
+          return b.current-a.current;
+        }).forEach(r=>{
+          const pct=r.target?Math.min(r.current/r.target*100,100):0;
+          const gap=r.gap;
+          h+=`<div class="cc" style="margin-top:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px"><div style="font-size:13px;font-weight:700">${r.role}</div><div style="display:flex;gap:14px;align-items:center"><div style="font-size:10px;color:var(--mt)">TARGET <span style="color:#fff;font-weight:700;font-size:13px">${r.target?fm(r.target):'—'}</span></div><div style="font-size:10px;color:var(--mt)">RAISED <span style="color:var(--gn);font-weight:700;font-size:13px">${fm(r.current)}</span></div><div style="font-size:10px;color:var(--mt)">GAP <span style="color:${gap>0?'var(--rd)':'var(--gn)'};font-weight:700;font-size:13px">${gap!=null?fm(gap):'—'}</span></div></div></div>`;
+          if(r.target){
+            h+=`<div style="height:6px;background:#1a1a1a;border-radius:3px;overflow:hidden;margin-bottom:8px"><div style="height:100%;background:${pct>=100?'var(--gn)':pct>=70?'var(--tl)':pct>=40?'var(--yl)':'var(--rd)'};width:${pct}%"></div></div>`;
+          }
+          if(r.contributors.length){
+            h+='<div style="display:flex;flex-wrap:wrap;gap:4px">';
+            r.contributors.sort((a,b)=>b.amount-a.amount).forEach(c=>{
+              h+=`<span class="ot" style="font-size:11px">${c.funder} · ${fm(c.amount)}</span>`;
+            });
+            h+='</div>';
+          }else{
+            h+='<div style="font-size:11px;color:var(--mt);font-style:italic">No funders allocated to this role yet</div>';
+          }
+          h+='</div>';
+        });
+      }
+    }
+  }
+
+  // ── REPORTING DEADLINES ──
+  if(S.tab==='reporting'){
+    if(S.fsLoading){h+='<div class="ld"><div class="sp"></div>Loading reporting data...</div>';}
+    else if(!S.fsd){h+='<div style="text-align:center;padding:40px;color:var(--mt)">Could not load Fundraising Overview 2026 sheet.<br><button class="scan" style="margin-top:12px" onclick="reloadFundraising()">RETRY</button></div>';}
+    else{
+      // Classify: Overdue, Due soon (<=30d), Upcoming (31-90d), Later, Unparseable
+      const buckets={overdue:[],due30:[],due90:[],later:[],unparseable:[]};
+      S.fsd.funders.forEach(f=>{
+        if(!f.reportDueRaw)return;
+        if(f.section&&/ending\s+in/i.test(f.section))return;
+        if(!f.reportDue||!f.reportDue.date){buckets.unparseable.push(f);return}
+        const dd=daysUntil(f.reportDue.date);
+        if(dd==null){buckets.unparseable.push(f);return}
+        if(dd<0)buckets.overdue.push(f);
+        else if(dd<=30)buckets.due30.push(f);
+        else if(dd<=90)buckets.due90.push(f);
+        else buckets.later.push(f);
+      });
+      // Sort each bucket
+      const bySortKey=(a,b)=>a.reportDue.date.getTime()-b.reportDue.date.getTime();
+      buckets.overdue.sort(bySortKey);buckets.due30.sort(bySortKey);
+      buckets.due90.sort(bySortKey);buckets.later.sort(bySortKey);
+      h+='<div style="font-size:12px;color:var(--sc);margin-bottom:14px">Report deadlines parsed from Current Funders &amp; Reporting dates tab. Run the Apps Script to send daily email + Chat alerts.</div>';
+      // Summary
+      h+='<div class="mrow">';
+      h+=`<div class="mc" style="border-left:3px solid var(--rd)"><div class="mc-l">OVERDUE</div><div class="mc-v" style="color:var(--rd)">${buckets.overdue.length}</div></div>`;
+      h+=`<div class="mc" style="border-left:3px solid var(--yl)"><div class="mc-l">DUE IN 30 DAYS</div><div class="mc-v" style="color:var(--yl)">${buckets.due30.length}</div></div>`;
+      h+=`<div class="mc" style="border-left:3px solid var(--tl)"><div class="mc-l">DUE IN 31-90 DAYS</div><div class="mc-v" style="color:var(--tl)">${buckets.due90.length}</div></div>`;
+      h+=`<div class="mc"><div class="mc-l">LATER</div><div class="mc-v" style="color:var(--sc)">${buckets.later.length}</div></div>`;
+      h+='</div>';
+      const renderBucket=(title,items,colour)=>{
+        if(items.length===0)return'';
+        let hh=`<div class="sec-t" style="margin-top:14px;color:${colour}">${title}</div><div class="tw"><table style="min-width:600px"><thead><tr><th>FUNDER</th><th>DUE</th><th>DAYS</th><th style="text-align:right">ANNUAL</th><th>RESTRICTION</th></tr></thead><tbody>`;
+        items.forEach(f=>{
+          const dd=daysUntil(f.reportDue.date);
+          const dcol=dd<0?'var(--rd)':dd<=14?'var(--yl)':dd<=60?'var(--tl)':'var(--sc)';
+          const dlabel=dd<0?Math.abs(dd)+' days ago':dd===0?'today':dd+' days';
+          const precision=f.reportDue.precise?'':'<span style="color:var(--mt);font-size:10px"> ~</span>';
+          hh+=`<tr><td style="font-weight:600;max-width:200px;white-space:normal">${f.funder}</td><td>${fmtDate(f.reportDue.date)}${precision}</td><td class="bb" style="font-size:13px;color:${dcol}">${dlabel}</td><td class="bb" style="font-size:13px;text-align:right">${f.annual?fm(f.annual):'—'}</td><td style="color:var(--sc);font-size:11px;max-width:200px;white-space:normal">${f.restriction||'—'}</td></tr>`;
+        });
+        hh+='</tbody></table></div>';
+        return hh;
+      };
+      h+=renderBucket('OVERDUE',buckets.overdue,'var(--rd)');
+      h+=renderBucket('DUE WITHIN 30 DAYS',buckets.due30,'var(--yl)');
+      h+=renderBucket('DUE 31-90 DAYS',buckets.due90,'var(--tl)');
+      h+=renderBucket('LATER',buckets.later,'var(--sc)');
+      if(buckets.unparseable.length>0){
+        h+='<div class="cc" style="margin-top:14px;border-left:3px solid var(--mt)"><div style="font-size:13px;font-weight:700;margin-bottom:8px">UNPARSEABLE DATES</div><div style="font-size:11px;color:var(--mt);margin-bottom:8px">These funders have a Report Due value that cannot be parsed to a specific date. Consider normalising to a date or "Month YYYY" format.</div>';
+        buckets.unparseable.forEach(f=>{h+=`<div style="padding:6px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;font-size:12px"><span style="font-weight:600">${f.funder}</span><span style="color:var(--sc);font-size:11px">"${f.reportDueRaw}"</span></div>`});
+        h+='</div>';
+      }
+    }
+  }
+
+  // ── MODALS ──
+  if(S.modal==='prospect')h+=`<div class="mo" onclick="if(event.target===this){S.modal=null;R()}"><div class="mb"><h3>ADD NEW PROSPECT</h3><label>Funder name</label><input placeholder="e.g. The Rayne Foundation" id="np-f"><label>Ask amount (£)</label><input type="number" placeholder="e.g. 25000" id="np-v"><label>Income type</label><select id="np-t"><option value="T&F">Trusts & Foundations</option><option value="Corporate">Corporate</option><option value="Statutory">Statutory</option><option value="Individual">Individual</option></select><label>Year</label><select id="np-y"><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select><label>Focus area</label><select id="np-fo"><option value="Core">Core</option><option value="Blaze FM">Blaze FM</option><option value="DoLs">DoLs</option><option value="Productions">Productions</option></select><label>Team member</label><select id="np-tm"><option value="Kashvi">Kashvi</option><option value="Zoe">Zoe</option><option value="James">James</option><option value="Molly">Molly</option><option value="—">Unassigned</option></select><div class="ma"><button class="mcnl" onclick="S.modal=null;R()">Cancel</button><button class="msub" onclick="addProspect()">Add to Pipeline</button></div></div></div>`;
+
+  a.innerHTML=h;
+  if(S.tab==='overview'&&d)requestAnimationFrame(()=>setTimeout(mkChart,100));
+}
+
+// ── Metric card helper ──
+function mc(l,v,c){return`<div class="mc"><div class="mc-l">${l}</div><div class="mc-v" style="color:${c}">${fs(v)}</div></div>`}
+
+// ── Gap bar helper ──
+function gapB(yr,sec,tgt,wp){
+  if(!tgt)return'';sec=sec||0;wp=wp||0;const gap=tgt-sec,cov=wp>=gap,pS=Math.min(sec/tgt*100,100),pW=Math.min((sec+wp)/tgt*100,100);
+  return`<div class="gap-c"><div class="gap-h"><span style="font-size:12px;font-weight:700">${yr}</span><span style="font-size:10px;color:${cov?'var(--gn)':'var(--rd)'}">Gap: ${fm(gap)} ${cov?'✓ Covered':'✗ Not covered'}</span></div><div class="gap-trk"><div class="gap-w" style="width:${pW}%"></div><div class="gap-s" style="width:${pS}%"></div></div><div class="gap-f"><span>£0</span><span>Target: ${fm(tgt)}</span></div></div>`;
+}
+
+// ── Chart — VERTICAL bars ──
+function mkChart(){
+  const cv=document.getElementById('ic');if(!cv||!S.sd)return;
+  const y=S.sd[S.yr];if(!y||!y.iT)return;
+  if(CI)CI.destroy();
+  CI=new Chart(cv,{type:'bar',data:{labels:S.sd.nm,datasets:[
+    {label:'Target',data:y.iT,backgroundColor:'#68E2D4',borderRadius:3},
+    {label:'Actual',data:y.iA,backgroundColor:'#E6007E',borderRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{
+    legend:{position:'top',labels:{color:'#fff',font:{family:'Lato',size:11},padding:16}},
+    tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': £'+ctx.parsed.y.toLocaleString()}}}
+  },scales:{
+    y:{ticks:{color:'#666',callback:v=>'£'+v.toLocaleString()},grid:{color:'#1a1a1a'}},
+    x:{ticks:{color:'#fff',font:{family:'Bebas Neue',size:11},maxRotation:45,minRotation:45},grid:{display:false}}
+  }}});
+}
+
+// ── Modal actions ──
+function addProspect(){
+  const f=document.getElementById('np-f')?.value;if(!f){toast('Enter a name');return}
+  PIPE.push({id:S.nid++,f,tm:document.getElementById('np-tm')?.value||'—',ph:'Research',fo:document.getElementById('np-fo')?.value||'Core',is:document.getElementById('np-t')?.value||'T&F',yr:parseInt(document.getElementById('np-y')?.value)||2026,st:'Prospect',w:.05,v:parseInt(document.getElementById('np-v')?.value)||0,src:'local'});
+  toast('Added "'+f+'" to pipeline');S.modal=null;writePipeline();R();
+}
+// ── CSV Export ──
+function exportCSV(){
+  const hdr=['Funder','Owner','Phase','Focus','Type','Year','Status','Ask','Probability','Weighted'];
+  const rows=PIPE.map(p=>[p.f,p.tm,p.ph,p.fo,p.is,p.yr,p.st,p.v,(p.w*100).toFixed(0)+'%',Math.round(p.v*p.w)]);
+  const csv=[hdr.join(','),...rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(','))].join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='tbh-pipeline-'+new Date().toISOString().split('T')[0]+'.csv';a.click();
+  toast('Pipeline exported as CSV');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+async function reloadFundraising(){
+  S.fsd=null;S.fsLoading=true;S.fsError=null;R();
+  S.fsd=await fetchFundraisingSheet();
+  if(S.fsd){
+    PIPE=S.fsd.pipeline||[];
+    S.nid=Math.max(...PIPE.map(p=>p.id),0)+1;
+    toast('Data loaded: '+PIPE.length+' pipeline prospects');
+  }else{
+    toast('Could not load fundraising sheet. Check it is shared: Anyone with the link can view.',true);
+  }
+  S.sd=await fetchSD();
+  R();
+}
+
+async function init(){
+  // Load financial workbook (Cheryl's master): overview, income budget, role allocations, multi-year grants
+  S.sd=await fetchSD();
+  R();
+  // Load fundraising workbook (pipeline, submissions, funders, reporting, quarterly, overview)
+  const fsd=await fetchFundraisingSheet();
+  if(fsd){
+    S.fsd=fsd;
+    PIPE=fsd.pipeline||[];
+    S.nid=Math.max(...PIPE.map(p=>p.id),100)+1;
+  }else{
+    PIPE=[];
+    S.nid=100;
+  }
+  R();
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
